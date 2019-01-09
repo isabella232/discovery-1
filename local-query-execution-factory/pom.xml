@@ -8,6 +8,11 @@
     <artifactId>local-query-execution-factory</artifactId>
     <version>0.2</version>
 
+	<properties>
+    		<maven.compiler.source>1.6</maven.compiler.source>
+    		<maven.compiler.target>1.6</maven.compiler.target>
+  	</properties>
+
 
     <dependencies>
     </dependencies>
