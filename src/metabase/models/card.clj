@@ -14,7 +14,8 @@
              [params :as params]
              [permissions :as perms]
              [query :as query]
-             [revision :as revision]]
+             [revision :as revision]
+             [field-filter :refer [FieldFilter]]]
             [metabase.models.query.permissions :as query-perms]
             [metabase.query-processor.util :as qputil]
             [metabase.util.query :as q]
@@ -33,6 +34,11 @@
   [{:keys [id]}]
   (db/count 'DashboardCard, :card_id id))
 
+(defn field-filters
+  "Return the FieldFilters associated with this Card."
+  {:hydrate :field_filters}
+  [{:keys [id]}]
+  (db/select FieldFilter :id_report_card id))
 ;;; -------------------------------------------------- Dependencies --------------------------------------------------
 
 (defn card-dependencies
