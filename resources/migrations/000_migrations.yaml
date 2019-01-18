@@ -4988,3 +4988,35 @@ databaseChangeLog:
         - dropColumn:
             tableName: metabase_field
             columnName: raw_column_id
+  - changeSet:
+      id: 92
+      author: alluesma
+      comment: 'Added 0.32.0'
+      changes:
+        - createTable:
+            tableName: CARD_FIELD_SQL_FILTER
+            remarks: 'Used to filter the values of a field'
+            columns:
+              - column:
+                  name: ID_REPORT_CARD
+                  type: int
+                  constraints:
+                    deferrable: false
+                    foreignKeyName: fk_sql_filter_ref_card_id
+                    initiallyDeferred: false
+                    nullable: false
+                    references: report_card(id)
+              - column:
+                  name: ID_METABASE_FIELD
+                  type: int
+                  constraints:
+                    deferrable: false
+                    foreignKeyName: fk_sql_filter_ref_field_id
+                    initiallyDeferred: false
+                    nullable: false
+                    references: metabase_field(id)
+              - column:
+                  name: FILTER
+                  type: text
+                  constraints:
+                    nullable: false
