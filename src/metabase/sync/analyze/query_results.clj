@@ -86,3 +86,14 @@
                             result-metadata)
                        (remove nil?))))
                (:rows results))))
+
+(def FieldIdFilter
+  "Field with its SQL filter"
+  {:field_id                    su/NonBlankString
+   :sql_filter                  su/NonBlankString})
+
+(def FieldSelectedValues
+  "Field with the selected values"
+  {:field_id                    su/NonBlankString
+   :selected_values             [su/NonBlankString]})
+
