@@ -4,8 +4,11 @@
             [compojure.core :refer [DELETE GET POST PUT]]
             [metabase.api.common :as api]
             [metabase.db.metadata-queries :as metadata]
+            [metabase.driver.generic-sql :as sql]
             [metabase.models
+             [card :as card :refer [Card]]
              [dashboard-card :refer [DashboardCard]]
+             [database :refer [Database]]
              [dimension :refer [Dimension]]
              [field :as field :refer [Field]]
              [field-filter :refer [FieldFilter]]
@@ -179,72 +182,42 @@
   [field-values]
   (let [column-names []]
     (for [field (map :field_id field-values)]
-      (db/select-one-field :name Field :id field)
-      ;;(conj column-names (db/select-one-field :name Field :id field))
-      )))
+      (db/select-one-field :name Field :id field))))
 
 (defn- replace-values
-  "Get"
+  "Replace a value of a query and call to replace the next one"
   [query field-values column-names]
   (if (empty? field-values)
     (str/replace query #"(\{{2})(\S+)(\}{2})" "1=1")
-    (replace-values (str/replace query (re-pattern (str "\\{{2}" (nth column-names 0) "\\}{2}")) (nth column-names 0))
+    (replace-values (str/replace query (re-pattern (str "\\{{2}" (nth column-names 0) "\\}{2}")) (str (nth column-names 0) " IN (" (str/join "," (:selected_values (nth field-values 0))) ")"))
                     (subvec (vec field-values) 1)
-                     (subvec (vec column-names) 1)))
-  )
+                     (subvec (vec column-names) 1))))
 
 (defn- replace-query-with-values
-  "Get "
+  "Get a query replaced with its values"
   [query field-values column-names]
   (when-not (nil? query)
-            (replace-values query field-values column-names)
-
-
-         ;;   (println "la query 0 es " query)
-         ;;   (println "field_values: " field-values)
-         ;;   (println "column_names: " column-names)
-        ;; (loop [i 0]
-         ;;   (when (< i (count field-values))
-         ;;         (println (str "(\\{{2})(" (nth column-names i) ")(\\}{2})"))
-        ;;          (println (re-pattern (str "(\\{{2})(" (nth column-names i) ")(\\}{2})")))
-        ;;      (str/replace query (re-pattern (str "\\{{2}" (nth column-names i) "\\}{2}")) "AAA")
-        ;;          (println "la query es " query)
-        ;;          (str/replace query (re-pattern (str "select")) "Funciona")
-        ;;          (println "prueba-find: " (re-find (re-pattern (nth column-names i)) query))
-        ;;          (let [aux query]
-        ;;            (println "prueba2 :" (str/replace aux (re-pattern (str "\\{{2}" (nth column-names i) "\\}{2}")) "AAA"))
-        ;;            (println "aux: " aux)
-        ;;            (str/replace aux #"select" "AAA")
-        ;;            (println "aux2: " aux)
-        ;;            (println "prueba3 :" (str/replace aux #"select" "AAA")))
-                  ;;(str "$2 IN " (:selected_values (nth field-values i)))
-         ;;         (recur (inc i))))
-        ;;(println "la query 2 es " query)
-        ;;(str/replace query #"(\{{2})(\S+)(\}{2})" "1=1")
-            ))
+            (replace-values query field-values column-names)))
 
 (defn- get-filtered-values-query
-  "Get "
+  "Get the queries for the filtered values"
   [cards field-id field-values]
-  (let [column-names (get-column-names field-values)
-        queries []]
-    (loop [i 0]
-      (when (< i (count cards))
-            (println "i: " i "id_report_card: " (nth cards i) " metabase_field: " field-id)
-            (conj queries (replace-query-with-values (db/select-one-field :filter FieldFilter, :id_report_card (:card_id (nth cards i)), :id_metabase_field field-id) field-values column-names))
-            (println "queries:" queries)
-            (recur (inc i))))
-    (str/join " UNION " queries)))
+  (let [column-names (get-column-names field-values)]
+    (loop [i 0 queries []]
+      (if (< i (count cards))
+            (recur
+              (inc i)
+              (conj queries (replace-query-with-values (db/select-one-field :filter FieldFilter, :id_report_card (:card_id (nth cards i)), :id_metabase_field field-id) field-values column-names))) queries))))
 
 (api/defendpoint POST "/:id/filtered-values"
   "Return a list of values filtered depending on the passed paramaters."
   [id :as {{:keys [dashboard_id field_values]} :body}]
   { dashboard_id            (s/maybe su/IntGreaterThanZero)
     field_values            (s/maybe [qr/FieldSelectedValues])}
-  (let [cards (db/select [DashboardCard :card_id], :dashboard_id id)]
-    (println "valores: " field_values)
-    (println "dashboard: " dashboard_id)
-    (jdbc/query (db/connection) [(get-filtered-values-query cards id field_values)])))
+  (let [cards     (db/select [DashboardCard :card_id], :dashboard_id id)
+        database_id  (db/select-one-field :database_id Card :id (:card_id (nth cards 0)))]
+    (let [queries (get-filtered-values-query cards id field_values)]
+      (assoc {} "values" (sort ((apply mapv vector (subvec (jdbc/query (sql/db->jdbc-connection-spec (db/select-one Database :id database_id)) [(str/join " UNION " (remove nil? queries))] {:as-arrays? true}) 1)) 0))))))
 
 ;; match things like GET /field-literal%2Ccreated_at%2Ctype%2FDatetime/values
 ;; (this is how things like [field-literal,created_at,type/Datetime] look when URL-encoded)
