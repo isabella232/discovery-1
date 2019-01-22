@@ -1,14 +1,22 @@
 (ns metabase.api.field
-  (:require [compojure.core :refer [DELETE GET POST PUT]]
+  (:require [clojure.java.jdbc :as jdbc]
+            [clojure.string :as str]
+            [compojure.core :refer [DELETE GET POST PUT]]
             [metabase.api.common :as api]
             [metabase.db.metadata-queries :as metadata]
+            [metabase.driver.generic-sql :as sql]
             [metabase.models
+             [card :as card :refer [Card]]
+             [dashboard-card :refer [DashboardCard]]
+             [database :refer [Database]]
              [dimension :refer [Dimension]]
              [field :as field :refer [Field]]
+             [field-filter :refer [FieldFilter]]
              [field-values :as field-values :refer [FieldValues]]
              [table :refer [Table]]]
             [metabase.query-processor :as qp]
             [metabase.related :as related]
+            [metabase.sync.analyze.query-results :as qr]
             [metabase.util :as u]
             [metabase.util.schema :as su]
             [schema.core :as s]
@@ -168,6 +176,48 @@
   defined by a User) a map of human-readable remapped values."
   [id]
   (field->values (api/read-check Field id)))
+
+(defn- get-column-names
+  "Get the field column names given field IDs"
+  [field-values]
+  (let [column-names []]
+    (for [field (map :field_id field-values)]
+      (db/select-one-field :name Field :id field))))
+
+(defn- replace-values
+  "Replace a value of a query and call to replace the next one"
+  [query field-values column-names]
+  (if (empty? field-values)
+    (str/replace query #"(\{{2})(\S+)(\}{2})" "1=1")
+    (replace-values (str/replace query (re-pattern (str "\\{{2}" (nth column-names 0) "\\}{2}")) (str (nth column-names 0) " IN (" (str/join "," (:selected_values (nth field-values 0))) ")"))
+                    (subvec (vec field-values) 1)
+                     (subvec (vec column-names) 1))))
+
+(defn- replace-query-with-values
+  "Get a query replaced with its values"
+  [query field-values column-names]
+  (when-not (nil? query)
+            (replace-values query field-values column-names)))
+
+(defn- get-filtered-values-query
+  "Get the queries for the filtered values"
+  [cards field-id field-values]
+  (let [column-names (get-column-names field-values)]
+    (loop [i 0 queries []]
+      (if (< i (count cards))
+            (recur
+              (inc i)
+              (conj queries (replace-query-with-values (db/select-one-field :filter FieldFilter, :id_report_card (:card_id (nth cards i)), :id_metabase_field field-id) field-values column-names))) queries))))
+
+(api/defendpoint POST "/:id/filtered-values"
+  "Return a list of values filtered depending on the passed paramaters."
+  [id :as {{:keys [dashboard_id field_values]} :body}]
+  { dashboard_id            (s/maybe su/IntGreaterThanZero)
+    field_values            (s/maybe [qr/FieldSelectedValues])}
+  (let [cards     (db/select [DashboardCard :card_id], :dashboard_id id)
+        database_id  (db/select-one-field :database_id Card :id (:card_id (nth cards 0)))]
+    (let [queries (get-filtered-values-query cards id field_values)]
+      (assoc {} "values" (sort ((apply mapv vector (subvec (jdbc/query (sql/db->jdbc-connection-spec (db/select-one Database :id database_id)) [(str/join " UNION " (remove nil? queries))] {:as-arrays? true}) 1)) 0))))))
 
 ;; match things like GET /field-literal%2Ccreated_at%2Ctype%2FDatetime/values
 ;; (this is how things like [field-literal,created_at,type/Datetime] look when URL-encoded)
