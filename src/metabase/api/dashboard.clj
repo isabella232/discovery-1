@@ -1,6 +1,7 @@
 (ns metabase.api.dashboard
   "/api/dashboard endpoints."
-  (:require [clojure.tools.logging :as log]
+  (:require [clojure.java.jdbc :as jdbc]
+            [clojure.tools.logging :as log]
             [compojure.core :refer [DELETE GET POST PUT]]
             [metabase.automagic-dashboards.populate :as magic.populate]
             [metabase
@@ -188,6 +189,18 @@
   (update dashboard :ordered_cards add-query-average-duration-to-dashcards))
 
 
+(defn- get-filters-with-sql
+  "Get the field filter ids that are filtered with SQL query in a dashboard."
+  [dashboard_id]
+  (let [query (format "SELECT DISTINCT ID_METABASE_FIELD FROM CARD_FIELD_SQL_FILTER WHERE ID_REPORT_CARD IN (SELECT CARD_ID FROM REPORT_DASHBOARDCARD WHERE DASHBOARD_ID = %s) AND FILTER IS NOT NULL ORDER BY ID_METABASE_FIELD ASC" dashboard_id)
+        result (jdbc/query (db/connection) [query] {:as-arrays? true})]
+    (nth (apply mapv vector (subvec result 1)) 0)))
+
+(defn- add-field-filters-with-sql
+  "Add to dashboard information the field filter ids that are filtered with SQL query."
+  [dashboard]
+  (assoc dashboard :field_filters_with_sql (get-filters-with-sql (get dashboard :id))))
+
 
 ;;; --------------------------------------------- Fetching/Updating/Etc. ---------------------------------------------
 
@@ -200,7 +213,8 @@
                api/read-check
                api/check-not-archived
                hide-unreadable-cards
-               add-query-average-durations)
+               add-query-average-durations
+               add-field-filters-with-sql)
     (events/publish-event! :dashboard-read (assoc <> :actor_id api/*current-user-id*))))
 
 
