@@ -89,11 +89,11 @@
 
 (def FieldIdFilter
   "Field with its SQL filter"
-  {:field_id                    su/NonBlankString
+  {:field_id                    s/Int
    :sql_filter                  su/NonBlankString})
 
 (def FieldSelectedValues
   "Field with the selected values"
-  {:field_id                    su/NonBlankString
+  {:field_id                    s/Int
    :selected_values             [su/NonBlankString]})
 
