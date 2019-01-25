@@ -163,6 +163,23 @@ function onRenderVoronoiHover(chart) {
     .order();
 }
 
+
+function onRenderInterpolateSeries(chart) {
+  if (chart.settings["line.missing"] === "interpolate_series") {
+
+    const chartSvg = chart.svg();
+    const chartStackList = chartSvg.selectAll(".stack-list");
+
+    const lastPathLine = chartSvg.select(".stack:last-child path.line");
+
+      chartStackList
+      .append("svg:g");
+      lastPathLine
+      .attr("stroke-dasharray", "1");
+
+  }
+}
+
 function onRenderCleanupGoal(chart, onGoalHover, isSplitAxis) {
   // remove dots
   chart.selectAll(".goal .dot").remove();
@@ -293,6 +310,7 @@ function onRender(chart, onGoalHover, isSplitAxis, isStacked) {
   onRenderSetDotStyle(chart);
   onRenderEnableDots(chart);
   onRenderVoronoiHover(chart);
+  onRenderInterpolateSeries(chart);
   onRenderCleanupGoal(chart, onGoalHover, isSplitAxis); // do this before hiding x-axis
   onRenderHideDisabledLabels(chart);
   onRenderHideDisabledAxis(chart);

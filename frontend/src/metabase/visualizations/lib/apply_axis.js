@@ -137,17 +137,22 @@ export function applyChartTimeseriesXAxis(
       }
     }
 
-    chart.xAxis().tickFormat(timestamp => {
+    chart.xAxis().tickFormat(timestamp  => {
+
       // timestamp is a plain Date object which discards the timezone,
       // so add it back in so it's formatted correctly
+      
+      let xDateType;
+      chart.settings["graph.x_axis.axis_enabled"] === "compact" ? xDateType = 'DD-MM-YYYY' :xDateType = '';
+
       const timestampFixed = moment(timestamp)
         .utcOffset(dataOffset)
-        .format();
+        .format(xDateType);
       return formatValue(timestampFixed, {
         column: dimensionColumn,
         type: "axis",
         compact: chart.settings["graph.x_axis.axis_enabled"] === "compact",
-      });
+      });     
     });
 
     // Compute a sane interval to display based on the data granularity, domain, and chart width

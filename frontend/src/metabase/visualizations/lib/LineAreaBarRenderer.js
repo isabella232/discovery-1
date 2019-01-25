@@ -141,6 +141,18 @@ function getXAxisProps(props, datas) {
   };
 }
 
+function lineAreaInterpolateSeries(props) {
+  if (props.chartType === "area") {
+    const chartStackList = d3.selectAll(".stack-list");
+
+    const pathLine = d3.selectAll(".dc-chart path.line");
+      chartStackList
+      .append("svg:g");
+      pathLine
+      .attr("stroke", "none")
+  }
+}
+
 ///------------------------------------------------------------ DIMENSIONS & GROUPS ------------------------------------------------------------///
 
 function getDimensionsAndGroupsForScatterChart(datas) {
@@ -326,7 +338,7 @@ function makeBrushChangeFunctions({ series, onChangeCardAndRun }) {
           nextCard: updateNumericFilter(card, column, start, end),
           previousCard: card,
         });
-      }
+      }     
     }
   }
 
@@ -338,9 +350,9 @@ function makeBrushChangeFunctions({ series, onChangeCardAndRun }) {
 function getDcjsChart(cardType, parent) {
   switch (cardType) {
     case "line":
-      return lineAddons(dc.lineChart(parent));
+    return lineAddons(dc.lineChart(parent));
     case "area":
-      return lineAddons(dc.lineChart(parent));
+    return lineAddons(dc.lineChart(parent));
     case "bar":
       return dc.barChart(parent);
     case "scatter":
@@ -356,12 +368,17 @@ function applyChartLineBarSettings(chart, settings, chartType) {
   if (chart.interpolate) {
     chart.interpolate(settings["line.interpolate"] || DEFAULT_INTERPOLATION);
   }
-
+  // 'interpolate_series' option (line/area charts), enable based on settings
+  if (chart.interpolate_series) {
+    chart.interpolate_series(settings["line.interpolate_series"]);
+  }
   // AREA:
   if (chart.renderArea) {
     chart.renderArea(chartType === "area");
   }
-
+  if (chart.renderLine) {
+    chart.renderLine(chartType === "line");
+  }
   // BAR:
   if (chart.barPadding) {
     chart
@@ -409,8 +426,8 @@ function setChartColor({ settings, chartType }, chart, groups, index) {
     } else {
       chart.colors(colors[index % colors.length]);
     }
-  } else {
-    chart.ordinalColors(colors);
+  } else { 
+      chart.ordinalColors(colors); 
   }
 }
 
@@ -692,6 +709,11 @@ export default function lineAreaBar(
   // only ordinal axis can display "null" values
   if (isOrdinal(parent.settings)) {
     delete warnings[NULL_DIMENSION_WARNING];
+  }
+  
+  // Interpolate series
+  if (settings["line.missing"] === "interpolate_series") {
+    lineAreaInterpolateSeries(props);
   }
 
   if (onRender) {

@@ -7,6 +7,7 @@ import { lineRenderer } from "../lib/LineAreaBarRenderer";
 import {
   GRAPH_DATA_SETTINGS,
   LINE_SETTINGS,
+  STACKABLE_SETTINGS,
   GRAPH_GOAL_SETTINGS,
   LINE_SETTINGS_2,
   GRAPH_COLORS_SETTINGS,
@@ -22,6 +23,7 @@ export default class LineChart extends LineAreaBarChart {
   static settings = {
     ...GRAPH_DATA_SETTINGS,
     ...LINE_SETTINGS,
+    ...STACKABLE_SETTINGS,
     ...GRAPH_GOAL_SETTINGS,
     ...LINE_SETTINGS_2,
     ...GRAPH_COLORS_SETTINGS,
