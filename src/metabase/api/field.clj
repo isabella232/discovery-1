@@ -184,14 +184,23 @@
     (for [field (map :field_id field-values)]
       (db/select-one-field :name Field :id field))))
 
+(defn- join-values
+  "Join the values of an array depending of its type"
+  [field-value]
+  (let [numeric-bool-value (jdbc/query (db/connection) [(format "SELECT * FROM METABASE_FIELD WHERE ID=%s AND BASE_TYPE IN ('type/BigInteger','type/Boolean','type/Decimal','type/Float','type/Integer')" (:field_id field-value))])]
+    (if (empty? numeric-bool-value)
+      (str "'" (str/join "','" (:selected_values field-value)) "'")
+      (str/join "," (:selected_values field-value)))))
+
+
 (defn- replace-values
   "Replace a value of a query and call to replace the next one"
   [query field-values column-names]
   (if (empty? field-values)
     (str/replace query #"(\{{2})(\S+)(\}{2})" "1=1")
-    (replace-values (str/replace query (re-pattern (str "\\{{2}" (nth column-names 0) "\\}{2}")) (str (nth column-names 0) " IN (" (str/join "," (:selected_values (nth field-values 0))) ")"))
-                    (subvec (vec field-values) 1)
-                     (subvec (vec column-names) 1))))
+    (replace-values (str/replace query (re-pattern (str "\\{{2}" (nth column-names 0) "\\}{2}")) (str (nth column-names 0) " IN (" (join-values (nth field-values 0)) ")"))
+                      (subvec (vec field-values) 1)
+                      (subvec (vec column-names) 1))))
 
 (defn- replace-query-with-values
   "Get a query replaced with its values"
@@ -214,7 +223,7 @@
   [id :as {{:keys [dashboard_id field_values]} :body}]
   { dashboard_id            (s/maybe su/IntGreaterThanZero)
     field_values            (s/maybe [qr/FieldSelectedValues])}
-  (let [cards     (db/select [DashboardCard :card_id], :dashboard_id id)
+  (let [cards     (db/select [DashboardCard :card_id], :dashboard_id dashboard_id)
         database_id  (db/select-one-field :database_id Card :id (:card_id (nth cards 0)))]
     (let [queries (get-filtered-values-query cards id field_values)]
       (assoc {} "values" (sort ((apply mapv vector (subvec (jdbc/query (sql/db->jdbc-connection-spec (db/select-one Database :id database_id)) [(str/join " UNION " (remove nil? queries))] {:as-arrays? true}) 1)) 0))))))
