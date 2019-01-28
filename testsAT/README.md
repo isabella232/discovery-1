@@ -29,31 +29,28 @@ mvn clean verify -Dgroups=config_postgres -DBOOTSTRAP_IP=10.200.0.155 -DDCOS_IP=
 ### Install Discovery
 mvn clean verify -Dgroups=install_discovery -DBOOTSTRAP_IP=10.200.0.155 -DDCOS_IP=10.200.0.156 -DDCOS_CLI_HOST=dcos-cli-nightly.demo.stratio.com -DDISC_VERSION=0.31.0 -DDISCOVERY_SERVICE_VHOST=nightlypublic.labs.stratio.com -DlogLevel=DEBUG
 
-<<<<<<< Updated upstream
-=======
 ### Install Discovery Command Center
--DFLAVOUR (mandatory): descriptor name value (Ex: hydra)
--DADVANCED_INSTALL (optional):
+-DDISC_FLAVOUR (mandatory): descriptor name value (Ex: hydra)
+-DDISC_ADVANCED_INSTALL (optional):
     Without parameter: will be executed the Basic install
-        - huawei: mvn clean verify -Dgroups=install_discovery_cc -DBOOTSTRAP_IP=10.10.4.2 -DDCOS_IP=10.10.4.61 -DDCOS_CLI_HOST=172.17.0.4 -DCLUSTER_DOMAIN=huawei.stratio.com -DDISC_VERSION=0.31.1 -DDISCOVERY_SERVICE_VHOST=public-1.labs.stratio.com -DlogLevel=DEBUG -DFLAVOUR=hydra -DCLUSTER_ID=bootstrap -DDISCOVERY_METADATA_DB_HOST=pg-0001.postgreseos.mesos -DDISCOVERY_TENANT_NAME=crossdata-1 -DPOSTGRES_FRAMEWORK_ID_TLS:-postgrestls -DDISCOVERY_METADATA_DB_NAME=pruebadiscovery
-        - intbootstrap: mvn clean verify -Dgroups=install_discovery_cc -DBOOTSTRAP_IP=10.200.1.52 -DDCOS_IP=10.200.0.242 -DDCOS_CLI_HOST=172.17.0.3 -DDISC_VERSION=0.31.1 -DDISCOVERY_SERVICE_VHOST=intpublic01.labs.stratio.com -DlogLevel=DEBUG -DCLUSTER_ID=intbootstrap -DPOSTGRES_FRAMEWORK_ID_TLS=postgrestls -DFLAVOUR=hydra
+        - intbootstrap: mvn clean verify -Dgroups=install_discovery_cc -DBOOTSTRAP_IP=10.200.1.52 -DDCOS_IP=10.200.0.242 -DDCOS_CLI_HOST=172.17.0.3 -DCLUSTER_ID=intbootstrap -DlogLevel=DEBUG -DDISC_VERSION=0.31.1 -DDISC_POSTGRES_FRAMEWORK_ID_TLS=postgrestls -DDISC_FLAVOUR=hydra
+        - nightly:      mvn clean verify -Dgroups=install_discovery_cc -DBOOTSTRAP_IP=10.200.0.155 -DDCOS_IP=10.200.0.156 -DDCOS_CLI_HOST=dcos-cli-nightly.demo.stratio.com -DCLUSTER_ID=nightly -DlogLevel=DEBUG -DDISC_VERSION=0.31.1 -DDISC_POSTGRES_FRAMEWORK_ID_TLS=postgrestls -DDISC_FLAVOUR=hydra
     With parameter: will be executed the Advance install
-        - intbootstrap: mvn clean verify -Dgroups=install_discovery_cc -DBOOTSTRAP_IP=10.200.1.52 -DDCOS_IP=10.200.0.242 -DDCOS_CLI_HOST=172.17.0.3 -DDISC_VERSION=0.31.1 -DDISCOVERY_SERVICE_VHOST=intpublic01.labs.stratio.com -DlogLevel=DEBUG -DCLUSTER_ID=intbootstrap -DPOSTGRES_FRAMEWORK_ID_TLS=postgrestls -DFLAVOUR=hydra -DADVANCED_INSTALL
+        - intbootstrap: mvn clean verify -Dgroups=install_discovery_cc -DBOOTSTRAP_IP=10.200.1.52 -DDCOS_IP=10.200.0.242 -DDCOS_CLI_HOST=172.17.0.3 -DCLUSTER_ID=intbootstrap -DlogLevel=DEBUG -DDISC_VERSION=0.31.1 -DDISC_POSTGRES_FRAMEWORK_ID_TLS=postgrestls -DDISC_FLAVOUR=hydra -DDISC_ADVANCED_INSTALL
+        - nightly:      mvn clean verify -Dgroups=install_discovery_cc -DBOOTSTRAP_IP=10.200.0.155 -DDCOS_IP=10.200.0.156 -DDCOS_CLI_HOST=dcos-cli-nightly.demo.stratio.com -DCLUSTER_ID=nightly -DlogLevel=DEBUG -DDISC_VERSION=0.31.1 -DDISC_POSTGRES_FRAMEWORK_ID_TLS=postgrestls -DDISC_FLAVOUR=hydra -DDISC_ADVANCED_INSTALL
 
 ### Purge Discovery Command Center
--DFLAVOUR (mandatory): descriptor name value (Ex: hydra)
+-DDISC_FLAVOUR (mandatory): descriptor name value (Ex: hydra)
 -DSERVICE_ID (optional). By default: /discovery/discovery
 -DSERVICE (optional): "service value" located in .../deploy-api/deploy/status/all when the service has been deployed. By default: discovery
     - intbootstrap
-    mvn clean verify -Dgroups=purge_discovery_cc -DBOOTSTRAP_IP=10.200.1.52 -DDCOS_IP=10.200.0.242 -DDCOS_CLI_HOST=172.17.0.3 -DDISC_VERSION=0.31.1 -DDISCOVERY_SERVICE_VHOST=intpublic01.labs.stratio.com -DlogLevel=DEBUG -DFLAVOUR=hydra -DCLUSTER_ID=intbootstrap
+    mvn clean verify -Dgroups=purge_discovery_cc -DBOOTSTRAP_IP=10.200.1.52 -DDCOS_IP=10.200.0.242 -DDCOS_CLI_HOST=172.17.0.3 -DlogLevel=DEBUG -DCLUSTER_ID=intbootstrap
     - huawei
-    mvn clean verify -Dgroups=purge_discovery_cc -DBOOTSTRAP_IP=10.10.4.2 -DDCOS_IP=10.10.4.61 -DDCOS_CLI_HOST=172.17.0.4 -DDISC_VERSION=0.31.1 -DDISCOVERY_SERVICE_VHOST=public-1.labs.stratio.com -DlogLevel=DEBUG -DFLAVOUR=discovery-orion -DCLUSTER_ID=bootstrap -DCLUSTER_DOMAIN=huawei.stratio.com
+    mvn clean verify -Dgroups=purge_discovery_cc -DBOOTSTRAP_IP=10.10.4.2 -DDCOS_IP=10.10.4.61 -DDCOS_CLI_HOST=172.17.0.4 -DlogLevel=DEBUG -DCLUSTER_ID=bootstrap
+    - nightly
+    mvn clean verify -Dgroups=purge_discovery_cc -DBOOTSTRAP_IP=10.200.0.155 -DDCOS_IP=10.200.0.156 -DDCOS_CLI_HOST=dcos-cli-nightly.demo.stratio.com -DlogLevel=DEBUG -DCLUSTER_ID=nightly
 
 
-
-
-
->>>>>>> Stashed changes
 ### Register Postgres database
 mvn clean verify -Dgroups=connection_PG -DDCOS_IP=10.200.0.156 -DDCOS_CLI_HOST=dcos-cli-nightly -DDISCOVERY_SERVICE_VHOST=nightlypublic.labs.stratio.com -DDISC_VERSION=0.31.0 -DlogLevel=DEBUG -DSELENIUM_GRID=sl.demo.stratio.com:4444 -DFORCE_BROWSER=chrome_64datagov
 ## For launch this group it's necessary having deployed next component:

@@ -6,23 +6,23 @@ Feature: [QATM-1866][Installation Discovery Command Center] Discovery install wi
   Scenario: [QATM-1866][Installation Discovery Command Center][00] Check PostgresTLS
     Given I authenticate to DCOS cluster '${DCOS_IP}' using email '${DCOS_USER:-admin}' with user '${REMOTE_USER:-operador}' and pem file '${BOOTSTRAP_PEM:-src/test/resources/credentials/key.pem}'
     And I securely send requests to '${CLUSTER_ID}.${CLUSTER_DOMAIN:-labs.stratio.com}:443'
-    Then in less than '100' seconds, checking each '10' seconds, I send a 'GET' request to '/service/deploy-api/deploy/status/all' so that the response contains '${POSTGRES_FRAMEWORK_ID_TLS:-postgrestls}'
-    And in less than '100' seconds, checking each '10' seconds, I send a 'GET' request to '/service/deploy-api/deploy/status/service?service=/${POSTGRES_FRAMEWORK_ID_TLS:-postgrestls}' so that the response contains '"healthy":1'
+    Then in less than '100' seconds, checking each '10' seconds, I send a 'GET' request to '/service/deploy-api/deploy/status/all' so that the response contains '${DISC_POSTGRES_FRAMEWORK_ID_TLS:-postgrestls}'
+    And in less than '100' seconds, checking each '10' seconds, I send a 'GET' request to '/service/deploy-api/deploy/status/service?service=/${DISC_POSTGRES_FRAMEWORK_ID_TLS:-postgrestls}' so that the response contains '"healthy":1'
 
     Given I authenticate to DCOS cluster '${DCOS_IP}' using email '${DCOS_USER:-admin}' with user '${REMOTE_USER:-operador}' and pem file '${BOOTSTRAP_PEM:-src/test/resources/credentials/key.pem}'
     And I securely send requests to '${DCOS_IP}:443'
-    Then in less than '100' seconds, checking each '5' seconds, I send a 'GET' request to '/service/${POSTGRES_FRAMEWORK_ID_TLS:-postgrestls}/v1/service/status' so that the response contains '"pg-0001","role":"master","status":"RUNNING"'
-    And in less than '100' seconds, checking each '5' seconds, I send a 'GET' request to '/service/${POSTGRES_FRAMEWORK_ID_TLS:-postgrestls}/v1/service/status' so that the response contains '"pg-0002","role":"sync_slave","status":"RUNNING"'
-    And in less than '100' seconds, checking each '5' seconds, I send a 'GET' request to '/service/${POSTGRES_FRAMEWORK_ID_TLS:-postgrestls}/v1/service/status' so that the response contains '"pg-0003","role":"async_slave","status":"RUNNING"'
+    Then in less than '100' seconds, checking each '5' seconds, I send a 'GET' request to '/service/${DISC_POSTGRES_FRAMEWORK_ID_TLS:-postgrestls}/v1/service/status' so that the response contains '"pg-0001","role":"master","status":"RUNNING"'
+    And in less than '100' seconds, checking each '5' seconds, I send a 'GET' request to '/service/${DISC_POSTGRES_FRAMEWORK_ID_TLS:-postgrestls}/v1/service/status' so that the response contains '"pg-0002","role":"sync_slave","status":"RUNNING"'
+    And in less than '100' seconds, checking each '5' seconds, I send a 'GET' request to '/service/${DISC_POSTGRES_FRAMEWORK_ID_TLS:-postgrestls}/v1/service/status' so that the response contains '"pg-0003","role":"async_slave","status":"RUNNING"'
 
 
-  @skipOnEnv(ADVANCED_INSTALL)
+  @skipOnEnv(DISC_ADVANCED_INSTALL)
   Scenario: [QATM-1866][Installation Discovery Command Center][1] Basic install
     Given I authenticate to DCOS cluster '${DCOS_IP}' using email '${DCOS_USER:-admin}' with user '${REMOTE_USER:-operador}' and pem file '${BOOTSTRAP_PEM:-src/test/resources/credentials/key.pem}'
     And I securely send requests to '${CLUSTER_ID}.${CLUSTER_DOMAIN:-labs.stratio.com}:443'
 
     # Obtain schema
-    When I send a 'GET' request to '/service/deploy-api/deploy/discovery/${FLAVOUR:-hydra}/schema?level=1'
+    When I send a 'GET' request to '/service/deploy-api/deploy/discovery/${DISC_FLAVOUR:-hydra}/schema?level=1'
     Then I save element '$' in environment variable 'discovery-json-schema'
     And I run 'echo !{discovery-json-schema}' locally
 
@@ -31,14 +31,14 @@ Feature: [QATM-1866][Installation Discovery Command Center] Discovery install wi
     And I run 'echo '!{discovery-basic.json}' > target/test-classes/schemas/discovery-basic.json' locally
 
     # Launch basic install
-    When I send a 'POST' request to '/service/deploy-api/deploy/discovery/${FLAVOUR:-hydra}/schema' based on 'schemas/discovery-basic.json' as 'json' with:
+    When I send a 'POST' request to '/service/deploy-api/deploy/discovery/${DISC_FLAVOUR:-hydra}/schema' based on 'schemas/discovery-basic.json' as 'json' with:
        # GENERAL
       | $.general.serviceId                         | UPDATE  | ${SERVICE_ID:-/discovery/discovery}                         | n/a     |
        # MARATHON LB
       | $.general.marathonlb.haproxyhost            | UPDATE  | ${MARATHONLB_HA_PROXY_HOST:-discovery.labs.stratio.com}     | n/a     |
       | $.general.marathonlb.haproxypath            | UPDATE  | ${MARATHONLB_HA_PROXY_PATH:-/discovery}                     | n/a     |
        # POSTGRESQL
-      | $.general.datastore.metadataDbInstanceName  | UPDATE  | ${POSTGRES_FRAMEWORK_ID_TLS:-postgrestls}                   | n/a     |
+      | $.general.datastore.metadataDbInstanceName  | UPDATE  | ${DISC_POSTGRES_FRAMEWORK_ID_TLS:-postgrestls}              | n/a     |
       | $.general.datastore.metadataDbName          | UPDATE  | ${DISCOVERY_METADATA_DB_NAME:-pruebadiscovery}              | n/a     |
       | $.general.datastore.tenantName              | UPDATE  | ${DISCOVERY_TENANT_NAME:-crossdata-1}                       | n/a     |
       | $.general.datastore.metadataDbHost          | UPDATE  | ${DISCOVERY_METADATA_DB_HOST:-pg-0001.postgrestls.mesos}    | n/a     |
@@ -53,27 +53,27 @@ Feature: [QATM-1866][Installation Discovery Command Center] Discovery install wi
     And I run 'rm -f target/test-classes/schemas/discovery-basic.json' locally
 
 
-  @runOnEnv(ADVANCED_INSTALL)
+  @runOnEnv(DISC_ADVANCED_INSTALL)
   Scenario: [QATM-1866][Installation Discovery Command Center][1] Advanced install
     Given I authenticate to DCOS cluster '${DCOS_IP}' using email '${DCOS_USER:-admin}' with user '${REMOTE_USER:-operador}' and pem file '${BOOTSTRAP_PEM:-src/test/resources/credentials/key.pem}'
 
     And I securely send requests to '${CLUSTER_ID}.${CLUSTER_DOMAIN:-labs.stratio.com}:443'
     # Obtain schema
-    When I send a 'GET' request to '/service/deploy-api/deploy/discovery/${FLAVOUR:-hydra}/schema?level=1'
+    When I send a 'GET' request to '/service/deploy-api/deploy/discovery/${DISC_FLAVOUR:-hydra}/schema?level=1'
     Then I save element '$' in environment variable 'discovery-json-schema'
     And I run 'echo !{discovery-json-schema}' locally
     # Convert to jsonSchema
     And I convert jsonSchema '!{discovery-json-schema}' to json and save it in variable 'discovery-basic.json'
     And I run 'echo '!{discovery-basic.json}' > target/test-classes/schemas/discovery-basic.json' locally
 
-    When I send a 'POST' request to '/service/deploy-api/deploy/discovery/${FLAVOUR:-hydra}/schema' based on 'schemas/discovery-basic.json' as 'json' with:
+    When I send a 'POST' request to '/service/deploy-api/deploy/discovery/${DISC_FLAVOUR:-hydra}/schema' based on 'schemas/discovery-basic.json' as 'json' with:
        # GENERAL
       | $.general.serviceId                         | UPDATE  | ${SERVICE_ID:-/discovery/discovery}                         | n/a     |
        # MARATHON LB
       | $.general.marathonlb.haproxyhost            | UPDATE  | ${MARATHONLB_HA_PROXY_HOST:-discovery.labs.stratio.com}     | n/a     |
       | $.general.marathonlb.haproxypath            | UPDATE  | ${MARATHONLB_HA_PROXY_PATH:-/discovery}                     | n/a     |
        # POSTGRESQL
-      | $.general.datastore.metadataDbInstanceName  | UPDATE  | ${POSTGRES_FRAMEWORK_ID_TLS:-postgrestls}                   | n/a     |
+      | $.general.datastore.metadataDbInstanceName  | UPDATE  | ${DISC_POSTGRES_FRAMEWORK_ID_TLS:-postgrestls}              | n/a     |
       | $.general.datastore.metadataDbName          | UPDATE  | ${DISCOVERY_METADATA_DB_NAME:-pruebadiscovery}              | n/a     |
       | $.general.datastore.tenantName              | UPDATE  | ${DISCOVERY_TENANT_NAME:-crossdata-1}                       | n/a     |
       | $.general.datastore.metadataDbHost          | UPDATE  | ${DISCOVERY_METADATA_DB_HOST:-pg-0001.postgrestls.mesos}    | n/a     |
