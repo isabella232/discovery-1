@@ -194,7 +194,8 @@
   [dashboard_id]
   (let [query (format "SELECT DISTINCT ID_METABASE_FIELD FROM CARD_FIELD_SQL_FILTER WHERE ID_REPORT_CARD IN (SELECT CARD_ID FROM REPORT_DASHBOARDCARD WHERE DASHBOARD_ID = %s) AND FILTER IS NOT NULL ORDER BY ID_METABASE_FIELD ASC" dashboard_id)
         result (jdbc/query (db/connection) [query] {:as-arrays? true})]
-    (nth (apply mapv vector (subvec result 1)) 0)))
+    (if (< 1 (count result))
+      (nth (apply mapv vector (subvec result 1)) 0))))
 
 (defn- add-field-filters-with-sql
   "Add to dashboard information the field filter ids that are filtered with SQL query."
