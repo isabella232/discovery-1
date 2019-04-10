@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.33.0 (upcoming)
+## 0.33.0 (April 10, 2019)
 
 * [ROCK-32] Upgrade XD library to 2.14.3
 * [ROCK-30] Impersonation refactor
