@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.33.1 (upcoming)
+## 0.33.1 (May 06, 2019)
 
 * [ROCK-56] Upgrade XD jdbc from 2.14.3 to 2.14.4
 * [ROCK-37] Fix prepareThreshold=0 directly in code spec.clj
