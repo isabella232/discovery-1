@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.33.2 (upcoming)
+## 0.33.2 (May 09, 2019)
 
 * [SS-5301] Personalize queries with filter returned error. Fixed in the Crossdata2 driver.
 
