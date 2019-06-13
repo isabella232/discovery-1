@@ -9,9 +9,9 @@ import org.testng.annotations.Factory;
 
 @CucumberOptions(features = {
         "src/test/resources/features/001_installation/002_disc_installDiscoveryCC.feature",
-        "src/test/resources/features/002_connections/001_disc_connectionXD_CCT.feature",
-        "src/test/resources/features/002_connections/002_disc_connectionPG_CCT.feature",
-        "src/test/resources/features/099_uninstall/001_disc_uninstallDiscoveryCC.feature"
+//        "src/test/resources/features/002_connections/001_disc_connectionXD_CCT.feature",
+//        "src/test/resources/features/002_connections/002_disc_connectionPG_CCT.feature",
+//        "src/test/resources/features/099_uninstall/001_disc_uninstallDiscoveryCC.feature"
 },format = "json:target/cucumber.json")
 
 public class DISC_nightlyCCT_IT extends BaseTest {

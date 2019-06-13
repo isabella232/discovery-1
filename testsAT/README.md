@@ -31,6 +31,7 @@ mvn clean verify -Dgroups=install_discovery -DBOOTSTRAP_IP=10.200.0.155 -DDCOS_I
 
 ### Install Discovery Command Center
 -DDISC_FLAVOUR (mandatory): descriptor name value (Ex: hydra)
+    - rocket: mvn clean verify -Dgroups=rocket -DBOOTSTRAP_IP=10.130.15.2 -DDCOS_IP=10.130.15.11 -DDCOS_CLI_HOST=dcos-golf -DCLUSTER_ID=bootstrap -DCLUSTER_DOMAIN=golf.hetzner.stratio.com -DlogLevel=DEBUG -DDISC_VERSION=0.33.2 -DDISC_POSTGRES_FRAMEWORK_ID_TLS=postgrestls -DDISC_FLAVOUR=pegaso -DDISCOVERY_CLUSTER_NAME=dc-auto -DSELENIUM_GRID=sl.demo.stratio.com:4444 -DFORCE_BROWSER=chrome_64sparta -DBOOTSTRAP_USER=automaticuser -DXD_USER=crossdata-1 -DCROSSDATA_NAME=crossdata -DPOSTGRES_NAME=postgrestls
     - intbootstrap: mvn clean verify -Dgroups=install_discovery_cc -DBOOTSTRAP_IP=10.200.1.52 -DDCOS_IP=10.200.0.242 -DDCOS_CLI_HOST=172.17.0.3 -DCLUSTER_ID=intbootstrap -DlogLevel=DEBUG -DDISC_VERSION=0.31.1 -DDISC_POSTGRES_FRAMEWORK_ID_TLS=postgrestls -DDISC_FLAVOUR=hydra
     - nightly:      mvn clean verify -Dgroups=install_discovery_cc -DBOOTSTRAP_IP=10.200.0.155 -DDCOS_IP=10.200.0.156 -DDCOS_CLI_HOST=dcos-cli-nightly.demo.stratio.com -DCLUSTER_ID=nightly -DlogLevel=DEBUG -DDISC_VERSION=0.31.1 -DDISC_POSTGRES_FRAMEWORK_ID_TLS=postgrestls -DDISC_FLAVOUR=hydra
 

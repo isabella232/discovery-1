@@ -1,0 +1,164 @@
+{
+  "id": "discovery-pg",
+  "name": "discovery-pg",
+  "users": [
+    {
+      "id": "discovery",
+      "name": "discovery",
+      "email": "discovery@stratio.com",
+      "custom": true
+    }
+  ],
+  "groups": [],
+  "services": [
+    {
+      "type": "communitypostgres",
+      "instancesAcl": [
+        {
+          "instances": [
+            {
+              "name": "postgrestls"
+            }
+          ],
+          "acls": [
+            {
+              "resourceType": "Foreign Data Wrapper",
+              "name": "discovery.*",
+              "recursive": false,
+              "actions": [
+                "Usage"
+              ],
+              "allActions": []
+            },
+            {
+              "resourceType": "Domain",
+              "name": "discovery.*",
+              "recursive": false,
+              "actions": [
+                "Usage"
+              ],
+              "allActions": []
+            },
+            {
+              "resourceType": "Function",
+              "name": "discovery.*",
+              "recursive": false,
+              "actions": [
+                "Execute"
+              ],
+              "allActions": []
+            },
+            {
+              "resourceType": "Tablespace",
+              "name": "discovery.*",
+              "recursive": false,
+              "actions": [
+                "Create"
+              ],
+              "allActions": []
+            },
+            {
+              "resourceType": "View",
+              "name": "discovery.*",
+              "recursive": false,
+              "actions": [
+                "Select",
+                "Insert",
+                "Update",
+                "Delete",
+                "Truncate",
+                "References",
+                "Trigger"
+              ],
+              "allActions": []
+            },
+            {
+              "resourceType": "Database",
+              "name": "discovery.*",
+              "recursive": false,
+              "actions": [
+                "Create",
+                "Temporary",
+                "Connect"
+              ],
+              "allActions": []
+            },
+            {
+              "resourceType": "Schema",
+              "name": "discovery.*",
+              "recursive": false,
+              "actions": [
+                "Create",
+                "Usage"
+              ],
+              "allActions": []
+            },
+            {
+              "resourceType": "Foreign Server",
+              "name": "discovery.*",
+              "recursive": false,
+              "actions": [
+                "Usage"
+              ],
+              "allActions": []
+            },
+            {
+              "resourceType": "Large object",
+              "name": "discovery.*",
+              "recursive": false,
+              "actions": [
+                "Select",
+                "Update"
+              ],
+              "allActions": []
+            },
+            {
+              "resourceType": "Table",
+              "name": "discovery.*",
+              "recursive": false,
+              "actions": [
+                "Select",
+                "Insert",
+                "Update",
+                "Delete",
+                "Truncate",
+                "References",
+                "Trigger"
+              ],
+              "allActions": []
+            },
+            {
+              "resourceType": "Language",
+              "name": "discovery.*",
+              "recursive": false,
+              "actions": [
+                "Usage"
+              ],
+              "allActions": []
+            },
+            {
+              "resourceType": "Type",
+              "name": "discovery.*",
+              "recursive": false,
+              "actions": [
+                "Usage"
+              ],
+              "allActions": []
+            },
+            {
+              "resourceType": "Sequence",
+              "name": "discovery.*",
+              "recursive": false,
+              "actions": [
+                "Select",
+                "Update",
+                "Usage"
+              ],
+              "allActions": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
