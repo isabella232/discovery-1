@@ -40,9 +40,9 @@ RUN apk add --update wget && \
     mvn package -f /app/source/local-query-execution-factory/pom.xml && \
     mv /app/source/local-query-execution-factory/target/local-query-execution-factory-0.2.jar /app/source/bin/lib/local-query-execution-factory-0.2.jar && \
     mvn install:install-file -Dfile=/app/source/bin/lib/local-query-execution-factory-0.2.jar -DgroupId=com.stratio.metabase -DartifactId=local-query-execution-factory -Dversion=0.2 -Dpackaging=jar && \
-    mvn dependency:get -DgroupId=com.stratio.jdbc -DartifactId=stratio-crossdata-jdbc4 -Dversion=2.14.4-1830fff -DremoteRepositories=http://sodio.stratio.com/repository/public/ -Dtransitive=false && \
-    mv /root/.m2/repository/com/stratio/jdbc/stratio-crossdata-jdbc4/2.14.4-1830fff/stratio-crossdata-jdbc4-2.14.4-1830fff.jar /app/source/bin/lib/stratio-crossdata-jdbc4-2.14.4-1830fff.jar && \
-    mvn install:install-file -Dfile=/app/source/bin/lib/stratio-crossdata-jdbc4-2.14.4-1830fff.jar -DgroupId=com.stratio.jdbc -DartifactId=stratio-crossdata-jdbc4 -Dversion=2.14.4-1830fff -Dpackaging=jar
+    mvn dependency:get -DgroupId=com.stratio.jdbc -DartifactId=stratio-crossdata-jdbc4 -Dversion=2.13.0-5000715 -DremoteRepositories=http://sodio.stratio.com/repository/public/ -Dtransitive=false && \
+    mv /root/.m2/repository/com/stratio/jdbc/stratio-crossdata-jdbc4/2.13.0-5000715/stratio-crossdata-jdbc4-2.13.0-5000715.jar /app/source/bin/lib/stratio-crossdata-jdbc4-2.13.0-5000715.jar && \
+    mvn install:install-file -Dfile=/app/source/bin/lib/stratio-crossdata-jdbc4-2.13.0-5000715.jar -DgroupId=com.stratio.jdbc -DartifactId=stratio-crossdata-jdbc4 -Dversion=2.13.0-5000715 -Dpackaging=jar
 
 # yarn:    frontend dependencies
 RUN npm install -g yarn
