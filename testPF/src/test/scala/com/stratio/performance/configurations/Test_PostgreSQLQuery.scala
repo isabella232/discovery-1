@@ -13,6 +13,7 @@ import com.stratio.performance.common.Common
 
 trait Test_PostgreSQLQuery extends Common {
 
-  override val query: String = "{\"database\":1,\"type\":\"query\",\"query\":{\"source_table\":1,\"filter\":[\"CONTAINS\",[\"field-id\",1],\"ern\"]},\"parameters\":[]}"
+  override val query: String = System.getProperty("QUERY", "{\"query\":{\"source_table\":236,\"filter\":[\"CONTAINS\",[\"field-id\",1560],\"a\",{\"case-sensitive\":false}]},\"type\":\"query\",\"database\":10,\"parameters\":[]}")
+
 
 }
