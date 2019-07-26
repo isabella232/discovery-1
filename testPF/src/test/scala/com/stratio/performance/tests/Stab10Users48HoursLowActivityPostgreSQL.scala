@@ -46,7 +46,13 @@ class Stab10Users48HoursLowActivityPostgreSQL extends Simulation with Common wit
               .post(queryEndpoint)
               .body(body)
               .headers(commonHeaders)
+              .check(bodyString.saveAs("RESPONSE_DATA"))
               .check(status.is(checkStatus))
+          ).exec(session => {
+              println("Some Restful Service Response Body Length:")
+              println(session("RESPONSE_DATA").as[String].length)
+              session
+            }
           ).pause(pauseTime)
         }
       }
