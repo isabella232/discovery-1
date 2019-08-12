@@ -2,6 +2,7 @@
 
 ## 0.34.0 (August 08, 2019)
 
+* [ROCK-523] Self referencing FK leads to "column reference is ambiguous" exception. Error with Metabase 0.30.1.
 * [ROCK-475] Fix "Discovery goes down while testing stability"
 * [ROCK-475] Fix when Discovery showed only tables from default database.
 * [ROCK-148] Multitenant
