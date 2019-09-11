@@ -1,5 +1,5 @@
 # Changelog
-## 0.33.3 (September 05, 2019)
+## 0.33.3 (September 11, 2019)
 
 * [ROCK-459] Fix error with Decimal types in Crossdata2 driver
 
