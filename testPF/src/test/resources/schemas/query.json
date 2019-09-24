@@ -1,0 +1,22 @@
+{
+  "query": {
+    "source_table": 54,
+    "filter": [
+      "AND",
+      [
+        "CONTAINS",
+        [
+          "field-id",
+          380
+        ],
+        "a",
+        {
+          "case-sensitive": false
+        }
+      ]
+    ]
+  },
+  "type": "query",
+  "database": 2,
+  "parameters": []
+}

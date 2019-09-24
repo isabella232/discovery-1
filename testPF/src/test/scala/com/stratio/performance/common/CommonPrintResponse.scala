@@ -9,8 +9,8 @@
 
 package com.stratio.performance.common
 
-trait TestProvidedQuery extends Common {
+trait CommonPrintResponse {
 
-  override val query: String = System.getProperty("QUERY", "")
+  val logType: String
 
 }

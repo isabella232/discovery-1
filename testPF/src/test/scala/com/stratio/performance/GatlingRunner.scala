@@ -1,4 +1,3 @@
-import com.stratio.performance.tests.{Stab10Users24HoursLowActivityPostgreSQL, Stab10Users48HoursLowActivityPostgreSQL}
 import io.gatling.app.Gatling
 import io.gatling.core.config.GatlingPropertiesBuilder
 
@@ -6,8 +5,13 @@ object GatlingRunner {
 
   def main(args: Array[String]): Unit = {
 
-    // this is where you specify the class you want to run
-    val simClass = classOf[Stab10Users48HoursLowActivityPostgreSQL].getName
+    if(args.length < 1) {
+      println("You must provide the test execution class")
+      System.exit(1)
+    }
+
+    val executionClass: String = s"com.stratio.performance.tests.${args(0)}"
+    val simClass = Class.forName(executionClass).getName
 
     val props = new GatlingPropertiesBuilder
     props.simulationClass(simClass)

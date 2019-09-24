@@ -10,10 +10,9 @@
 package com.stratio.performance.configurations
 
 import com.stratio.performance.common.Common
+import scala.io.Source
 
 trait Test_PostgreSQLQuery extends Common {
 
-  override val query: String = System.getProperty("QUERY", "{\"query\":{\"source_table\":1,\"filter\":[\"CONTAINS\",[\"field-id\",1],\"a\",{\"case-sensitive\":false}]},\"type\":\"query\",\"database\":1,\"parameters\":[]}")
-
-
+  override val query: String = System.getProperty("QUERY", "{\"query\":{\"source_table\":54,\"filter\":[\"AND\",[\"CONTAINS\",[\"field-id\",380],\"a\",{\"case-sensitive\":false}]]},\"type\":\"query\",\"database\":2,\"parameters\":[]}")
 }
