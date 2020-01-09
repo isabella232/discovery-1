@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.35.0 (November 25, 2019)
+## 0.35.0 (January 09, 2020)
 
 * Logs in Datacentric standard format
 * Avoid Discovery checks Crossdata connection each 3 mins
