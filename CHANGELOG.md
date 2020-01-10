@@ -6,6 +6,7 @@
 
 ## 0.35.0-8cd0e5b (Built: January 09, 2020 | Pre-release)
 
+* [ROCK-345] Dashboard nested filters
 * Logs in Datacentric standard format
 * Avoid Discovery checks Crossdata connection each 3 mins
 * [ROCK-459] Maintaining the compatibility with Datio descriptor in Stratio scripts about service
