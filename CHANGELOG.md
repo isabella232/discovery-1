@@ -4,7 +4,7 @@
 
 * Pending changelog
 
-## 0.35.0-8cd0e5b (Built: January 09, 2020 | Pre-release)
+## 0.35.0-b421b20 (Built: January 15, 2020 | Pre-release)
 
 * [ROCK-345] Dashboard nested filters
 * Logs in Datacentric standard format
