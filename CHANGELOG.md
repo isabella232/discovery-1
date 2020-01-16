@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.35.0 (January 15, 2020)
+## 0.35.0 (January 16, 2020)
 
 * [ROCK-345] Dashboard nested filters
 * Logs in Datacentric standard format
