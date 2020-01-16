@@ -4,7 +4,7 @@
 
 * Pending changelog
 
-## 0.35.0-b421b20 (Built: January 15, 2020 | Pre-release)
+## 0.35.0-af854b5 (Built: January 16, 2020 | Pre-release)
 
 * [ROCK-345] Dashboard nested filters
 * Logs in Datacentric standard format
@@ -15,6 +15,7 @@
 * New Crossdata driver as a plugin
 * [ROCK-629] Add JWT authentication
 * Fix: Revert too strict site-url validation
+* [ROCK-1220] Audit log activity events
 
 ## 0.34.0-7f4b16c (Built: September 19, 2019 | Released: September 20, 2019)
 
