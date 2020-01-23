@@ -3,7 +3,7 @@
 
 #### 0.35.0-af854b5 (Built: January 16, 2020 | Pre-release)
 
-#### 0.34.2-d3dc772 (Built: January 17, 2020 | Pre-release)
+#### 0.34.2-d172bca (Built: January 23, 2020 | Pre-release)
 
 #### 0.34.1-f4d6a91 (Built: November 22, 2019 | Released: November 27, 2019)
 
