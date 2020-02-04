@@ -60,7 +60,11 @@
                  slingshot]]
    [clj-time "0.15.1"]                                                ; library for dealing with date/time
    [clojurewerkz/quartzite "2.1.0"                                    ; scheduling library
-    :exclusions [c3p0]]
+    :exclusions [c3p0
+                 ;; < STRATIO - upgrade quartz for fix vulnerabilities
+                 org.quartz-scheduler/quartz]]
+   [org.quartz-scheduler/quartz "2.3.2"]
+   ;; STRATIO >
    [colorize "0.1.1" :exclusions [org.clojure/clojure]]               ; string output with ANSI color codes (for logging)
    [com.cemerick/friend "0.2.3"                                       ; auth library
     :exclusions [commons-codec
@@ -114,7 +118,7 @@
    [org.tcrawley/dynapath "1.0.0"]                                    ; Dynamically add Jars (e.g. Oracle or Vertica) to classpath
    [org.yaml/snakeyaml "1.23"]                                        ; YAML parser (required by liquibase)
    [potemkin "0.4.5"]                                                 ; utility macros & fns
-   [com.stratio.jdbc/stratio-crossdata-jdbc4       "2.14.4-1830fff"
+   [com.stratio.crossdata.driver/stratio-crossdata-jdbc4       "2.16.2-2e12375"
                   :exclusions [org.clojure/clojure
                                org.bouncycastle/bcpkix-jdk15on
                                org.bouncycastle/bcprov-jdk15on
