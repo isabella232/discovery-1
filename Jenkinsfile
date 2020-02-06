@@ -13,7 +13,8 @@ hose {
 
     ATTIMEOUT = 90
     INSTALLTIMEOUT = 90
-
+    ANCHORE_POLICY = 'discovery'
+        
     PKGMODULESNAMES = ['discovery']
 
     DEV = { config ->
