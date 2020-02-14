@@ -4,8 +4,9 @@
 
 * Fix vulnerabilities
 
-## 0.35.0-af854b5 (Built: January 16, 2020 | Pre-release)
+## 0.35.0-24bac37 (Built: February 14, 2020 | Pre-release)
 
+* Update Crossdata JDBC driver to 2.17.0 version
 * [ROCK-345] Dashboard nested filters
 * Logs in Datacentric standard format
 * Avoid Discovery checks Crossdata connection each 3 mins
