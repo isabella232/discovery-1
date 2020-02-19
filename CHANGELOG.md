@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.35.0 (February 14, 2020)
+## 0.35.0 (February 19, 2020)
 
 * Update Crossdata JDBC driver to 2.17.0-07b9b70 version
 * [ROCK-345] Dashboard nested filters
