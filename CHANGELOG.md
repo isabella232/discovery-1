@@ -4,7 +4,7 @@
 
 * Fix vulnerabilities
 
-## 0.35.0-edadd56 (Built: February 19, 2020 | Pre-release)
+## 0.35.0-edadd56 (Built: February 19, 2020 | Released: February 19, 2020)
 
 * Update Crossdata JDBC driver to 2.17.0-07b9b70 version
 * [ROCK-345] Dashboard nested filters
