@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.35.1 (upcoming)
+## 0.35.1 (February 27, 2020)
 
 * Fix use of variables in native questions  
 
