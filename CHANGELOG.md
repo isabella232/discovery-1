@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.36.0 (upcoming)
+## 0.37.0 (upcoming)
+
+* Pending changelog
+
+## 0.36.0-6ad4005 (Built: March 05, 2020 | Pre-release)
 
 * Fix vulnerabilities
 
