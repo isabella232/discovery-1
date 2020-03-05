@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.36.0 (upcoming)
+## 0.36.0 (March 05, 2020)
 
 * Fix vulnerabilities
 
