@@ -1,7 +1,7 @@
 # Version History
 
 
-#### 0.36.0-6ad4005 (Built: March 05, 2020 | Pre-release)
+#### 0.36.0-6ad4005 (Built: March 05, 2020 | Released: March 06, 2020)
 
 #### 0.35.1-f226da9 (Built: February 27, 2020 | Released: March 03, 2020)
 

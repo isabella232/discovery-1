@@ -4,7 +4,7 @@
 
 * Pending changelog
 
-## 0.36.0-6ad4005 (Built: March 05, 2020 | Pre-release)
+## 0.36.0-6ad4005 (Built: March 05, 2020 | Released: March 06, 2020)
 
 * Fix vulnerabilities
 
