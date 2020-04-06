@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.37.0 (upcoming)
+## 0.37.0 (April 06, 2020)
 
 * Allow Pgbouncer connection
 * Integrate with SSO Login
