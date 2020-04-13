@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.37.1 (upcoming)
+## 0.37.1 (April 13, 2020)
 * Fix: allow group with users containing "@" character
 
 ## 0.37.0 (April 06, 2020)
