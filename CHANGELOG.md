@@ -6,6 +6,7 @@
 * Integrate with SSO Login
 
 * Fix postgres connection through crossdata
+* Fix: allow group with users containing "@" character
 
 ## 0.36.0 (March 05, 2020)
 
