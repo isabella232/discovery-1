@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.37.2 (upcoming)
+## 0.37.2 (May 14, 2020)
 * Integration of discovery-cicd (shell interface)
 
 
