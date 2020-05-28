@@ -4,7 +4,7 @@
 
 * Pending changelog
 
-## 0.38.0-04ad956 (Built: May 28, 2020 | Pre-release)
+## 0.38.0-04ad956 (Built: May 28, 2020 | Released: May 28, 2020)
 
 * Import/Export for collections
 * Prometheus metrics
