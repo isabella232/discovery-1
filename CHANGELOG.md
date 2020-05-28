@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.38.0 (upcoming)
+## 0.38.0 (May 28, 2020)
 
 * Import/Export for collections
 * Prometheus metrics
