@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.38.1 (upcoming)
+## 0.38.1 (June 29, 2020)
 
 * Make proxies timeout configurable
 * Bump import/export artifact version to 1.2.0-e81eb29
