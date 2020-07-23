@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.38.2 (upcoming)
+## 0.38.2 (July 23, 2020)
 
 * Bump import/export artifact version to 1.2.1-1570d16 (fix parentId query param)
 
