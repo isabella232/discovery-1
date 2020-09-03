@@ -2,14 +2,17 @@
 
 hose {
     EMAIL = 'rocket'
-    MODULE = 'discovery'
-    REPOSITORY = 'discovery'
-    SLACKTEAM = 'data-governance'
-    BUILDTOOL = 'make'
-    DEVTIMEOUT = 120
-    RELEASETIMEOUT = 80
-    BUILDTOOLVERSION = '3.5.0'
+    DEVTIMEOUT = 300
+    RELEASETIMEOUT = 200
+    PKGMODULES = ['dist']
+    PKGMODULESNAMES = ['discovery']
+    DEBARCH = 'all'
+    MAVEN_THREADSPERCORE = 1
+    EXPOSED_PORTS = [9090,10000,11000]
     NEW_VERSIONING = 'true'
+    LABEL_CONTROL = 'true'
+    ANCHORE_TEST = 'true'
+    BUILDTOOLVERSION = '3.6.2'
 
     ATTIMEOUT = 90
     INSTALLTIMEOUT = 90
@@ -33,7 +36,7 @@ hose {
         | -DREMOTE_USER=\$PEM_VMWARE_USER
         | -DSELENIUM_GRID=selenium391.cd:4444
         | -DFORCE_BROWSER=chrome_64%%JUID
-        | """
+        | """.stripMargin().stripIndent()
 
     ATCREDENTIALS = [[TYPE:'sshKey', ID:'PEM_VMWARE']]
 
