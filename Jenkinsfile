@@ -36,7 +36,7 @@ hose {
 
     ATCREDENTIALS = [[TYPE:'sshKey', ID:'PEM_VMWARE']]
 
-    INSTALL { config, params ->
+    INSTALL = { config, params ->
         def parameters = stringToMap(params.ENVIRONMENT)
     	parameters["PEM_FILE_PATH"] = params["HETZNER_CLUSTER"] ? "\$PEM_VMWARE_PATH" : "\$PEM_VMWARE_KEY"
         parameters["quietasdefault"] = parameters["quietasdefault"] ? parameters["quietasdefault"] : "false"
