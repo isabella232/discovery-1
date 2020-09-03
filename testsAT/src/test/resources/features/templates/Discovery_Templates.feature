@@ -13,9 +13,9 @@ Feature: Discovery scenario templates
 
   Scenario: Get Postgres IP
     Given I set sso token using host '!{EOS_ACCESS_POINT}' with user '${DCOS_USER}' and password '${DCOS_PASSWORD}' and tenant 'NONE'
-    When I get host ip for task 'pg-0001' in service with id '/${DCOS_TENANT1}/${DCOS_TENANT1}-${POSTGRES_NAME:-postgrestls}' from CCT and save the value in environment variable 'pgIP'
+    When I get host ip for task 'pg-0001' in service with id '/${DCOS_TENANT1}/${DCOS_TENANT1}-${DISCOVERY_POSTGRES_NAME:-postgrestls}' from CCT and save the value in environment variable 'pgIP'
     And I run 'echo '!{pgIP}'' locally
-    Then I get container name for task 'pg-0001' in service with id '/${DCOS_TENANT1}/${DCOS_TENANT1}-${POSTGRES_NAME:-postgrestls}' and save the value in environment variable 'pgContainerName'
+    Then I get container name for task 'pg-0001' in service with id '/${DCOS_TENANT1}/${DCOS_TENANT1}-${DISCOVERY_POSTGRES_NAME:-postgrestls}' and save the value in environment variable 'pgContainerName'
     And I run 'echo '!{pgContainerName}'' locally
 
   Scenario: Get Discovery URL

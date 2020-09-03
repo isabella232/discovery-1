@@ -7,14 +7,14 @@ Feature: Crossdata Conexion with Discovery
   Scenario: [01] Add Crossdata Policy
     Given I set sso token using host '!{EOS_ACCESS_POINT}' with user '${DCOS_TENANT1_OWNER_USER}' and password '${DCOS_TENANT1_OWNER_PASSWORD}' and tenant '${DCOS_TENANT1}'
     And I securely send requests to '!{EOS_ACCESS_POINT}:443'
-    Given I get version of service 'crossdata' with id '\/${DCOS_TENANT1}\/${DCOS_TENANT1}-${CROSSDATA_ID:-crossdata-1}' in tenant '${DCOS_TENANT1}' with tenant user and tenant password '${DCOS_TENANT1_OWNER_USER}:${DCOS_TENANT1_OWNER_PASSWORD}' and save it in environment variable 'crossdata_plugin_version'
+    Given I get version of service 'crossdata' with id '\/${DCOS_TENANT1}\/${DCOS_TENANT1}-${DISCOVERY_XD_SERVICE_NAME:-crossdata-1}' in tenant '${DCOS_TENANT1}' with tenant user and tenant password '${DCOS_TENANT1_OWNER_USER}:${DCOS_TENANT1_OWNER_PASSWORD}' and save it in environment variable 'crossdata_plugin_version'
     And I run 'echo crossdata plugin !{crossdata_plugin_version}' locally
-    Given I create 'policy' '${CROSSDATA_ID:-crossdata-1}-${DISCOVERY_ID:-discovery-qa}' in tenant ${DCOS_TENANT1}' if it does not exist based on 'schemas/crossdata_policy.json' as 'json' with:
+    Given I create 'policy' '${DISCOVERY_XD_SERVICE_NAME:-crossdata-1}-${DISCOVERY_ID:-discovery-qa}' in tenant ${DCOS_TENANT1}' if it does not exist based on 'schemas/crossdata_policy.json' as 'json' with:
       | $.auditable                            | REPLACE | true                                                          | boolean |
-      | $.name                                 | UPDATE  | ${CROSSDATA_ID:-crossdata-1}-${DISCOVERY_ID:-discovery-qa}    | string  |
+      | $.name                                 | UPDATE  | ${DISCOVERY_XD_SERVICE_NAME:-crossdata-1}-${DISCOVERY_ID:-discovery-qa}    | string  |
       | $.groups                               | REPLACE | []                                                            | array   |
-      | $.users                                | REPLACE | [{"uid":${DCOS_TENANT1}-${CROSSDATA_ID:-crossdata-1}}]        | array   |
-      | $.services[0].sidsAcls[0].sids[0].name | UPDATE  | /${DCOS_TENANT1}/${DCOS_TENANT1}-${CROSSDATA_ID:-crossdata-1} | n/a     |
+      | $.users                                | REPLACE | [{"uid":${DCOS_TENANT1}-${DISCOVERY_XD_SERVICE_NAME:-crossdata-1}}]        | array   |
+      | $.services[0].sidsAcls[0].sids[0].name | UPDATE  | /${DCOS_TENANT1}/${DCOS_TENANT1}-${DISCOVERY_XD_SERVICE_NAME:-crossdata-1} | n/a     |
       | $.services[0].version                  | UPDATE  | !{crossdata_plugin_version}                                   | n/a     |
 
   Scenario: [02] Create Crossdata Database Connection for Discovery
@@ -26,10 +26,10 @@ Feature: Crossdata Conexion with Discovery
 #    Then in less than '200' seconds, checking each '5' seconds, I send a 'POST' request to '/${DISCOVERY_ID:-discovery-qa}/api/database' so that the response contains '"name":"${DISCOVERY_DATABASE_XD_CONNECTION_NAME:-crossdata}",' based on 'schemas/registerdatabase_crossdata.json' as 'json' with:
       | $.engine                     | UPDATE  | ${DISCOVERY_ENGINE_XD:-crossdata}                                           | string |
       | $.name                       | UPDATE  | ${DISCOVERY_DATABASE_XD_CONNECTION_NAME:-crossdata}                         | string |
-      | $.details.host               | UPDATE  | ${DCOS_TENANT1}-${CROSSDATA_ID:-crossdata-1}.${DCOS_TENANT1}.marathon.mesos | string |
+      | $.details.host               | UPDATE  | ${DCOS_TENANT1}-${DISCOVERY_XD_SERVICE_NAME:-crossdata-1}.${DCOS_TENANT1}.marathon.mesos | string |
       | $.details.port               | REPLACE | ${DISCOVERY_XD_PORT:-8000}                                                  | number |
       | $.details.dbname             | UPDATE  | crossdatabla                                                                | string |
-      | $.details.user               | UPDATE  | ${DCOS_TENANT1}-${CROSSDATA_ID:-crossdata-1}                                | string |
+      | $.details.user               | UPDATE  | ${DCOS_TENANT1}-${DISCOVERY_XD_SERVICE_NAME:-crossdata-1}                                | string |
       | $.details.additional-options | DELETE  |                                                                             | string |
       | $.details.tunnel-port        | DELETE  |                                                                             | string |
     Then the service response status must be '200'
@@ -82,5 +82,5 @@ Feature: Crossdata Conexion with Discovery
 
   @skipOnEnv(DISCOVERY_SKIP_UNINSTALL=yes)
   Scenario: [04] Delete Rocket policy
-    Given I delete 'policy' '${CROSSDATA_ID:-crossdata-1}-${DISCOVERY_ID:-discovery-qa}' from tenant '${DCOS_TENANT1}' with tenant user and tenant password '${DCOS_TENANT1_OWNER_USER}:${DCOS_TENANT1_OWNER_PASSWORD}' if it exists
+    Given I delete 'policy' '${DISCOVERY_XD_SERVICE_NAME:-crossdata-1}-${DISCOVERY_ID:-discovery-qa}' from tenant '${DCOS_TENANT1}' with tenant user and tenant password '${DCOS_TENANT1_OWNER_USER}:${DCOS_TENANT1_OWNER_PASSWORD}' if it exists
 

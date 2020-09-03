@@ -21,8 +21,8 @@ Feature: [QATM-1866][Installation Discovery Command Center] Discovery install wi
       | $.general.discoveryInstanceName            | REPLACE | ${DCOS_TENANT1}-${DISCOVERY_ID:-discovery-qa}                                | string |
       | $.general.marathonlb.haproxyhost           | REPLACE | !{publicAgentFQDN}                                                           | string |
       | $.general.marathonlb.haproxypath           | REPLACE | /${DISCOVERY_ID:-discovery-qa}                                               | string |
-      | $.general.datastore.metadataDbInstanceName | REPLACE | ${DCOS_TENANT1}-${POSTGRES_NAME:-postgrestls}.${DCOS_TENANT1}                | string |
-      | $.general.datastore.postgresService        | REPLACE | /${DCOS_TENANT1}/${DCOS_TENANT1}-${POSTGRES_NAME:-postgrestls}               | string |
+      | $.general.datastore.metadataDbInstanceName | REPLACE | ${DCOS_TENANT1}-${DISCOVERY_POSTGRES_NAME:-postgrestls}.${DCOS_TENANT1}                | string |
+      | $.general.datastore.postgresService        | REPLACE | /${DCOS_TENANT1}/${DCOS_TENANT1}-${DISCOVERY_POSTGRES_NAME:-postgrestls}               | string |
       | $.general.datastore.metadataDbName         | REPLACE | ${DISCOVERY_METADATA_DB_NAME:-discovery}                                     | string |
       | $.general.calico.networkName               | REPLACE | ${DCOS_TENANT1}-core                                                         | string |
       | $.general.resources.instances              | REPLACE | ${DISCOVERY_SERVICE_INSTANCES:-1}                                            | number |
