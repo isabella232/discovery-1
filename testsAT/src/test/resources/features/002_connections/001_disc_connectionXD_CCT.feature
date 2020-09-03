@@ -23,7 +23,6 @@ Feature: Crossdata Conexion with Discovery
     Given I obtain metabase id for user '${USER:-demo@stratio.com}' and password '${PASSWORD:-123456}' in endpoint 'https://!{DISCOVERY_HOST}/${DISCOVERY_ID:-discovery-qa}${DISCOVERY_SESSION:-/api/session}' and save in context cookies
     When I securely send requests to '!{DISCOVERY_HOST}:443'
     When I send a 'POST' request to '/${DISCOVERY_ID:-discovery-qa}/api/database' based on 'schemas/registerdatabase_crossdata.json' as 'json' with:
-#    Then in less than '200' seconds, checking each '5' seconds, I send a 'POST' request to '/${DISCOVERY_ID:-discovery-qa}/api/database' so that the response contains '"name":"${DISCOVERY_DATABASE_XD_CONNECTION_NAME:-crossdata}",' based on 'schemas/registerdatabase_crossdata.json' as 'json' with:
       | $.engine                     | UPDATE  | ${DISCOVERY_ENGINE_XD:-crossdata}                                           | string |
       | $.name                       | UPDATE  | ${DISCOVERY_DATABASE_XD_CONNECTION_NAME:-crossdata}                         | string |
       | $.details.host               | UPDATE  | ${DCOS_TENANT1}-${DISCOVERY_XD_SERVICE_NAME:-crossdata-1}.${DCOS_TENANT1}.marathon.mesos | string |

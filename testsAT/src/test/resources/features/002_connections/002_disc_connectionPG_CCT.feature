@@ -44,7 +44,6 @@ Feature: Postgres Conexion with Discovery
 
     # Check query postgres database
     When I securely send requests to '!{DISCOVERY_HOST}:443'
-#    When I send a 'POST' request to '/${DISCOVERY_ID:-discovery-qa}${DISCOVERY_DATASET:-/api/dataset}' based on 'schemas/dataset.json' as 'json' with:
     Then in less than '5' seconds, checking each '1' seconds, I send a 'POST' request to '/${DISCOVERY_ID:-discovery-qa}/api/dataset' so that the response contains '200' based on 'schemas/dataset.json' as 'json' with:
       | $.database                 | REPLACE | !{pgdatabaseId}                         | number |
       | $.type                     | UPDATE  | ${DISCOVERY_TYPE_DATASET:-query}        | string |

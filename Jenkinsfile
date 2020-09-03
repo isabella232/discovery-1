@@ -36,14 +36,14 @@ hose {
 
     ATCREDENTIALS = [[TYPE:'sshKey', ID:'PEM_VMWARE']]
 
-    INSTALL = { config ->
+    INSTALL { config, params ->
+        def parameters = stringToMap(params.ENVIRONMENT)
     	parameters["PEM_FILE_PATH"] = params["HETZNER_CLUSTER"] ? "\$PEM_VMWARE_PATH" : "\$PEM_VMWARE_KEY"
         parameters["quietasdefault"] = parameters["quietasdefault"] ? parameters["quietasdefault"] : "false"
         parameters["groups"] = parameters["GROUPS_DISCOVERY"] ? parameters["GROUPS_DISCOVERY"] : "nightly"
         def environmentAuth = parameters["HETZNER_CLUSTER"]
         parameters = doReplaceTokens("", parameters)
         doAT(conf: config, parameters: parameters, customServices: customServices, environmentAuth: environmentAuth)
-
 
     }
 }
