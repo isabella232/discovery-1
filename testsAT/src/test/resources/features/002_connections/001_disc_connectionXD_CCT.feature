@@ -48,20 +48,11 @@ Feature: Crossdata Conexion with Discovery
       | $.native.query | UPDATE  | INSERT INTO discovery_crossdata_table VALUES(1, 'test1') | string |
       | $.database     | REPLACE | !{crossdatadatabaseId}                                   | number |
 
-    Then the service response status must be '200'
-    When I send a 'POST' request to '/${DISCOVERY_ID:-discovery-qa}/api/dataset' based on 'schemas/query.json' as 'json' with:
-      | $.native.query | UPDATE  | INSERT INTO discovery_crossdata_table VALUES(2, 'test2') | string |
-      | $.database     | REPLACE | !{crossdatadatabaseId}                                   | number |
-    Then the service response status must be '200'
-    When I send a 'POST' request to '/${DISCOVERY_ID:-discovery-qa}/api/dataset' based on 'schemas/query.json' as 'json' with:
-      | $.native.query | UPDATE  | INSERT INTO discovery_crossdata_table VALUES(3, 'test3') | string |
-      | $.database     | REPLACE | !{crossdatadatabaseId}                                   | number |
-    Then the service response status must be '200'
     When I send a 'POST' request to '/${DISCOVERY_ID:-discovery-qa}/api/dataset' based on 'schemas/query.json' as 'json' with:
       | $.native.query | UPDATE  | select count(*) from discovery_crossdata_table | string |
       | $.database     | REPLACE | !{crossdatadatabaseId}                         | number |
     Then the service response status must be '200'
-#    And the service response must contain the text '"rows":[[3]]'
+
 
   @skipOnEnv(DISCOVERY_SKIP_UNINSTALL=yes)
   Scenario: [03] Delete Crossdata Conexion with Discovery

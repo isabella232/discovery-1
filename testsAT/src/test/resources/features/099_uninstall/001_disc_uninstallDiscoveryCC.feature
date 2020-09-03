@@ -1,5 +1,5 @@
 @rest @dcos
-Feature: [Uninstallation Discovery Command Center] Discovery uninstall with command center
+Feature: Discovery Unistall with command center
 
   @skipOnEnv(DISCOVERY_SKIP_UNINSTALL=yes)
   Scenario: Uninstall Discovery

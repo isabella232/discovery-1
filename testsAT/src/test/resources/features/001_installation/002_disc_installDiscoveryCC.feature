@@ -1,7 +1,7 @@
 @mandatory @vars(BOOTSTRAP_IP,REMOTE_USER,PEM_FILE_PATH,DCOS_PASSWORD,DCOS_TENANT1,UNIVERSE_VERSION,DCOS_TENANT1_OWNER_USER,DCOS_TENANT,DCOS_TENANT1_OWNER_PASSWORD)
 @rest @dcos
 
-Feature: [QATM-1866][Installation Discovery Command Center] Discovery install with command center]
+Feature: Discovery install with command center]
 
   @skipOnEnv(DISCOVERY_PUBLIC_AGENT_FQDN)
   @include(feature:../templates/Discovery_Templates.feature,scenario:Take publicAgentFQDN)
