@@ -47,4 +47,39 @@ hose {
         doAT(conf: config, parameters: parameters, customServices: customServices, environmentAuth: environmentAuth)
 
     }
+    INSTALL = { config, params ->
+        def ENVIRONMENTMAP = stringToMap(params.ENVIRONMENT)
+        def pempathhetzner = ""
+        pempathhetzner = """${params.ENVIRONMENT}
+            |PEM_FILE_PATH=\$PEM_VMWARE_PATH
+            |""".stripMargin().stripIndent()
+
+        def PATHHETZNER = stringToMap(pempathhetzner)
+        def PATHHETZNERINSTALL = doReplaceTokens(INSTALLPARAMETERS.replaceAll(/\n/, ''), PATHHETZNER)
+
+        def pempathvmware = ""
+        pempathvmware = """${params.ENVIRONMENT}
+            |PEM_FILE_PATH=\$PEM_VMWARE_KEY
+            |""".stripMargin().stripIndent()
+
+        def PATHVMWARE = stringToMap(pempathvmware)
+        def PATHVMWAREINSTALL = doReplaceTokens(INSTALLPARAMETERS.replaceAll(/\n/, ' '), PATHVMWARE) 
+
+        if (config.INSTALLPARAMETERS.contains('GROUPS_DISCOVERY')) {
+          if (params.ENVIRONMENT.contains('HETZNER_CLUSTER')) {
+            PATHHETZNERINSTALL = "${PATHHETZNERINSTALL}".replaceAll('-DGROUPS_DISCOVERY', '-Dgroups')
+            doAT(conf: config, parameters: PATHHETZNERINSTALL, environmentAuth: ENVIRONMENTMAP['HETZNER_CLUSTER'])
+          } else {
+            PATHVMWAREINSTALL = "${PATHVMWAREINSTALL}".replaceAll('-DGROUPS_DISCOVERY', '-Dgroups')
+            doAT(conf: config, parameters: PATHVMWAREINSTALL)
+          }
+        } else {
+          if (params.ENVIRONMENT.contains('HETZNER_CLUSTER')) {
+            doAT(conf: config, groups: ['nightly'], parameters: PATHHETZNERINSTALL, environmentAuth: ENVIRONMENTMAP['HETZNER_CLUSTER'])
+          } else {
+            doAT(conf: config, groups: ['nightly'], parameters: PATHVMWAREINSTALL)
+          }
+        }
+    }
+
 }
