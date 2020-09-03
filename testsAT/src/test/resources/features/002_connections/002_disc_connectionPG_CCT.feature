@@ -21,7 +21,6 @@ Feature: Postgres Conexion with Discovery
     Given I obtain metabase id for user '${USER:-demo@stratio.com}' and password '${PASSWORD:-123456}' in endpoint 'https://!{DISCOVERY_HOST}/${DISCOVERY_ID:-discovery-qa}${DISCOVERY_SESSION:-/api/session}' and save in context cookies
     And I securely send requests to '!{DISCOVERY_HOST}:443'
     Then in less than '200' seconds, checking each '5' seconds, I send a 'POST' request to '/${DISCOVERY_ID:-discovery-qa}${DISCOVERY_DATABASES:-/api/database}' so that the response contains '"name":"${DISCOVERY_DATABASE_PG_CONNECTION_NAME:-discovery}",' based on 'schemas/registerdatabase.json' as 'json' with:
-#    When I send a 'POST' request to '/${DISCOVERY_ID:-discovery-qa}/api/database' based on 'schemas/registerdatabase.json' as 'json' with:
       | $.engine                                        | UPDATE  | ${DISCOVERY_ENGINE_PG:-postgres}                                                                                                                                                        | string |
       | $.name                                          | UPDATE  | ${DISCOVERY_DATABASE_PG_CONNECTION_NAME:-discovery}                                                                                                                                     | string |
       | $.details.host                                  | UPDATE  | pg-0001.${DCOS_TENANT1}-${DISCOVERY_POSTGRES_NAME:-postgrestls}.${DCOS_TENANT1}.mesos                                                                                                                                                                     | string |
@@ -32,7 +31,6 @@ Feature: Postgres Conexion with Discovery
     Then the service response status must be '200'
 #     Get postgres database id
     When I securely send requests to '!{DISCOVERY_HOST}:443'
-#    Then in less than '300' seconds, checking each '10' seconds, I send a 'GET' request to '/${DISCOVERY_ID:-discovery-qa}${DISCOVERY_DATABASES:-/api/database}' so that the response contains '"engine":${DISCOVERY_ENGINE_PG:-postgres}'
     When I send a 'GET' request to '/${DISCOVERY_ID:-discovery-qa}/api/database'
     Then the service response status must be '200'
     And I save element '$' in environment variable 'exhibitor_answer'
@@ -40,7 +38,6 @@ Feature: Postgres Conexion with Discovery
     And I run 'echo !{parsed_answer} | jq '.[] | select(.name=="${DISCOVERY_DATABASE_PG_CONNECTION_NAME:-discovery}") | .id'' locally and save the value in environment variable 'pgdatabaseId'
     When I securely send requests to '!{DISCOVERY_HOST}:443'
     Then in less than '300' seconds, checking each '10' seconds, I send a 'GET' request to '/${DISCOVERY_ID:-discovery-qa}/api/table' so that the response contains '"name":"table_test_plan"'
-#    When I send a 'GET' request to '/${DISCOVERY_ID:-discovery-qa}/api/table'
     Then the service response status must be '200'
     And I save element '$' in environment variable 'tables_answer'
     And I save ''!{tables_answer}'' in variable 'parsed_answer'

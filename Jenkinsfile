@@ -27,40 +27,22 @@ hose {
             		'volumes': ['/dev/shm:/dev/shm'],
 	                'env': ['HUB_HOST=selenium391.cd','HUB_PORT=4444','SE_OPTS="-browser browserName=chrome,version=64%%JUID "']
             	       ]],
-            ['DCOSCLI': ['image': 'stratio/dcos-cli:0.4.15-SNAPSHOT',
-                         'env': ['DCOS_IP=10.200.0.156',
-                                 'SSL=true',
-                                 'SSH=true',
-                                 'TOKEN_AUTHENTICATION=true',
-                                 'DCOS_USER=admin',
-                                 'DCOS_PASSWORD=1234',
-                                 'CLI_BOOTSTRAP_USER=root',
-                        	 'CLI_BOOTSTRAP_PASSWORD=stratio'],
-                         'sleep':  120,
-                         'healthcheck': 5000]]
     ]
 
     INSTALLPARAMETERS = """
-        | -DDCOS_CLI_HOST=%%DCOSCLI#0
-        | -DCLUSTER_ID=nightly
-        | -DDCOS_IP=10.200.0.156
-        | -DBOOTSTRAP_IP=10.200.0.155
         | -DSELENIUM_GRID=selenium391.cd:4444
         | -DFORCE_BROWSER=chrome_64%%JUID
-        | -DREMOTE_USER=operador
-	| -DDISC_POSTGRES_FRAMEWORK_ID_TLS=postgrestls
-	| -DDISC_FLAVOUR=hydra
-	| -DGOSECMANAGEMENT_HOST=nightly.labs.stratio.com
-	| -DDISCOVERY_SERVICE_VHOST=nightlypublic.labs.stratio.com
-        | -Dquietasdefault=false
-        | """.stripMargin().stripIndent()
+        | """
 
     INSTALL = { config ->
+    	parameters["PEM_FILE_PATH"] = params["HETZNER_CLUSTER"] ? "\$PEM_VMWARE_PATH" : "\$PEM_VMWARE_KEY"
+        parameters["quietasdefault"] = parameters["quietasdefault"] ? parameters["quietasdefault"] : "false"
+         parameters["groups"] = parameters["GROUPS_DISCOVERY"] ? parameters["GROUPS_DISCOVERY"] : "nightly"
         if (config.INSTALLPARAMETERS.contains('GROUPS_DISCOVERY')) {
             config.INSTALLPARAMETERS = "${config.INSTALLPARAMETERS}".replaceAll('-DGROUPS_DISCOVERY', '-Dgroups')
             doAT(conf: config)
         } else {
-            doAT(conf: config, groups: ['CCTnightly'])
+            doAT(conf: config, groups: ['nightly'])
         }
     }
 }
