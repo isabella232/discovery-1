@@ -36,9 +36,8 @@ Feature: Crossdata Conexion with Discovery
     #Get Crossdata Database ID
     When I securely send requests to '!{DISCOVERY_HOST}:443'
     When I send a 'GET' request to '/${DISCOVERY_ID:-discovery-qa}/api/database'
-    And I save element '$' in environment variable 'exhibitor_answer'
-    And I save ''!{exhibitor_answer}'' in variable 'parsed_answer'
-    And I run 'echo !{parsed_answer} | jq '.[] | select(.name=="${DISCOVERY_DATABASE_XD_CONNECTION_NAME:-crossdata}") | .id'' locally and save the value in environment variable 'crossdatadatabaseId'
+    And I save element '$' in environment variable 'answer'
+    And I run 'echo '!{answer}' | jq '.[] | select(.name=="${DISCOVERY_DATABASE_XD_CONNECTION_NAME:-crossdata}") | .id'' locally and save the value in environment variable 'crossdatadatabaseId'
     #Create tables for Crossdata-Database with Discovery
     When I securely send requests to '!{DISCOVERY_HOST}:443'
     When I send a 'POST' request to '/${DISCOVERY_ID:-discovery-qa}/api/dataset' based on 'schemas/query.json' as 'json' with:

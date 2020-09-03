@@ -34,15 +34,16 @@ hose {
         | -DFORCE_BROWSER=chrome_64%%JUID
         | """
 
+    ATCREDENTIALS = [[TYPE:'sshKey', ID:'PEM_VMWARE']]
+
     INSTALL = { config ->
     	parameters["PEM_FILE_PATH"] = params["HETZNER_CLUSTER"] ? "\$PEM_VMWARE_PATH" : "\$PEM_VMWARE_KEY"
         parameters["quietasdefault"] = parameters["quietasdefault"] ? parameters["quietasdefault"] : "false"
-         parameters["groups"] = parameters["GROUPS_DISCOVERY"] ? parameters["GROUPS_DISCOVERY"] : "nightly"
-        if (config.INSTALLPARAMETERS.contains('GROUPS_DISCOVERY')) {
-            config.INSTALLPARAMETERS = "${config.INSTALLPARAMETERS}".replaceAll('-DGROUPS_DISCOVERY', '-Dgroups')
-            doAT(conf: config)
-        } else {
-            doAT(conf: config, groups: ['nightly'])
-        }
+        parameters["groups"] = parameters["GROUPS_DISCOVERY"] ? parameters["GROUPS_DISCOVERY"] : "nightly"
+        def environmentAuth = parameters["HETZNER_CLUSTER"]
+        parameters = doReplaceTokens("", parameters)
+        doAT(conf: config, parameters: parameters, customServices: customServices, environmentAuth: environmentAuth)
+
+
     }
 }

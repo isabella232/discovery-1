@@ -35,19 +35,11 @@ Feature: [QATM-1866][Installation Discovery Command Center] Discovery install wi
     And I install service 'discovery' with model '${DISCOVERY_FLAVOUR:-default}' and version '${UNIVERSE_VERSION}' and instance name '${DISCOVERY_ID:-discovery-qa}' in tenant '${DCOS_TENANT1}' using json 'discovery_descriptor.json'
     And I run 'rm -f target/test-classes/discovery-descriptor.json' locally
 
-
   Scenario: Check command output with correct expresion and exist status=0
     Given I set sso token using host '!{EOS_ACCESS_POINT}' with user '${DCOS_USER}' and password '${DCOS_PASSWORD}' and tenant '${DCOS_TENANT}'
     Then in less than '1200' seconds, checking each '5' seconds, service with id '/${DCOS_TENANT1}/${DCOS_TENANT1}-${DISCOVERY_ID:-discovery-qa}' has '1' task in 'running' state in Marathon
     Then in less than '2200' seconds, checking each '5' seconds, service with id '/${DCOS_TENANT1}/${DCOS_TENANT1}-${DISCOVERY_ID:-discovery-qa}' has '1' 'healthy' task in Marathon
     When I wait '${DISCOVERY_WAIT:-60}' seconds
-
-#  @include(feature:../templates/Discovery_Templates.feature,scenario: Get Discovery URL)
-#  Scenario: Validate Discovery Request
-#    Given I set sso discovery token using host '!{DISCOVERY_HOST}/${DISCOVERY_ID:-discovery-qa}/auth' with user '${DCOS_TENANT1_OWNER_USER}' and password '${DCOS_TENANT1_OWNER_PASSWORD}' and tenant '${DCOS_TENANT1}' without host name verification with cookie name '${DCOS_TENANT1}-${DISCOVERY_ID:-discovery-qa}-auth-cookie'
-#    Given I securely send requests to '!{DISCOVERY_HOST}'
-#    And in less than '1000' seconds, checking each '10' seconds, I send a 'GET' request to '/${DISCOVERY_ID:-discovery-qa}' so that the response contains 'Metabase'
-#    Then the service response status must be '200'
 
   @runOnEnv(DISCOVERY_WEB_VALIDATION)
   @web
