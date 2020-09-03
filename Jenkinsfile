@@ -30,6 +30,7 @@ hose {
     ]
 
     INSTALLPARAMETERS = """
+        | -DREMOTE_USER=\$PEM_VMWARE_USER
         | -DSELENIUM_GRID=selenium391.cd:4444
         | -DFORCE_BROWSER=chrome_64%%JUID
         | """
