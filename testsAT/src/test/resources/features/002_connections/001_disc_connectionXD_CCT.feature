@@ -52,7 +52,7 @@ Feature: Crossdata Conexion with Discovery
       | $.native.query | UPDATE  | select count(*) from discovery_crossdata_table | string |
       | $.database     | REPLACE | !{crossdatadatabaseId}                         | number |
     Then the service response status must be '200'
-
+    And the service response must contain the text '"rows":[[1]]'
 
   @skipOnEnv(DISCOVERY_SKIP_UNINSTALL=yes)
   Scenario: [03] Delete Crossdata Conexion with Discovery
