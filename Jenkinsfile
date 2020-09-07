@@ -2,14 +2,17 @@
 
 hose {
     EMAIL = 'rocket'
-    MODULE = 'discovery'
-    REPOSITORY = 'discovery'
-    SLACKTEAM = 'data-governance'
-    BUILDTOOL = 'make'
-    DEVTIMEOUT = 120
-    RELEASETIMEOUT = 80
-    BUILDTOOLVERSION = '3.5.0'
+    DEVTIMEOUT = 300
+    RELEASETIMEOUT = 200
+    PKGMODULES = ['dist']
+    PKGMODULESNAMES = ['discovery']
+    DEBARCH = 'all'
+    MAVEN_THREADSPERCORE = 1
+    EXPOSED_PORTS = [9090,10000,11000]
     NEW_VERSIONING = 'true'
+    LABEL_CONTROL = 'true'
+    ANCHORE_TEST = 'true'
+    BUILDTOOLVERSION = '3.6.2'
 
     ATTIMEOUT = 90
     INSTALLTIMEOUT = 90
@@ -27,40 +30,49 @@ hose {
             		'volumes': ['/dev/shm:/dev/shm'],
 	                'env': ['HUB_HOST=selenium391.cd','HUB_PORT=4444','SE_OPTS="-browser browserName=chrome,version=64%%JUID "']
             	       ]],
-            ['DCOSCLI': ['image': 'stratio/dcos-cli:0.4.15-SNAPSHOT',
-                         'env': ['DCOS_IP=10.200.0.156',
-                                 'SSL=true',
-                                 'SSH=true',
-                                 'TOKEN_AUTHENTICATION=true',
-                                 'DCOS_USER=admin',
-                                 'DCOS_PASSWORD=1234',
-                                 'CLI_BOOTSTRAP_USER=root',
-                        	 'CLI_BOOTSTRAP_PASSWORD=stratio'],
-                         'sleep':  120,
-                         'healthcheck': 5000]]
     ]
 
     INSTALLPARAMETERS = """
-        | -DDCOS_CLI_HOST=%%DCOSCLI#0
-        | -DCLUSTER_ID=nightly
-        | -DDCOS_IP=10.200.0.156
-        | -DBOOTSTRAP_IP=10.200.0.155
+        | -DREMOTE_USER=\$PEM_VMWARE_USER
         | -DSELENIUM_GRID=selenium391.cd:4444
         | -DFORCE_BROWSER=chrome_64%%JUID
-        | -DREMOTE_USER=operador
-	| -DDISC_POSTGRES_FRAMEWORK_ID_TLS=postgrestls
-	| -DDISC_FLAVOUR=hydra
-	| -DGOSECMANAGEMENT_HOST=nightly.labs.stratio.com
-	| -DDISCOVERY_SERVICE_VHOST=nightlypublic.labs.stratio.com
-        | -Dquietasdefault=false
         | """.stripMargin().stripIndent()
 
-    INSTALL = { config ->
+    ATCREDENTIALS = [[TYPE:'sshKey', ID:'PEM_VMWARE']]
+
+    INSTALL = { config, params ->
+        def ENVIRONMENTMAP = stringToMap(params.ENVIRONMENT)
+        def pempathhetzner = ""
+        pempathhetzner = """${params.ENVIRONMENT}
+            |PEM_FILE_PATH=\$PEM_VMWARE_PATH
+            |""".stripMargin().stripIndent()
+
+        def PATHHETZNER = stringToMap(pempathhetzner)
+        def PATHHETZNERINSTALL = doReplaceTokens(INSTALLPARAMETERS.replaceAll(/\n/, ''), PATHHETZNER)
+
+        def pempathvmware = ""
+        pempathvmware = """${params.ENVIRONMENT}
+            |PEM_FILE_PATH=\$PEM_VMWARE_KEY
+            |""".stripMargin().stripIndent()
+
+        def PATHVMWARE = stringToMap(pempathvmware)
+        def PATHVMWAREINSTALL = doReplaceTokens(INSTALLPARAMETERS.replaceAll(/\n/, ' '), PATHVMWARE) 
+
         if (config.INSTALLPARAMETERS.contains('GROUPS_DISCOVERY')) {
-            config.INSTALLPARAMETERS = "${config.INSTALLPARAMETERS}".replaceAll('-DGROUPS_DISCOVERY', '-Dgroups')
-            doAT(conf: config)
+          if (params.ENVIRONMENT.contains('HETZNER_CLUSTER')) {
+            PATHHETZNERINSTALL = "${PATHHETZNERINSTALL}".replaceAll('-DGROUPS_DISCOVERY', '-Dgroups')
+            doAT(conf: config, parameters: PATHHETZNERINSTALL, environmentAuth: ENVIRONMENTMAP['HETZNER_CLUSTER'])
+          } else {
+            PATHVMWAREINSTALL = "${PATHVMWAREINSTALL}".replaceAll('-DGROUPS_DISCOVERY', '-Dgroups')
+            doAT(conf: config, parameters: PATHVMWAREINSTALL)
+          }
         } else {
-            doAT(conf: config, groups: ['CCTnightly'])
+          if (params.ENVIRONMENT.contains('HETZNER_CLUSTER')) {
+            doAT(conf: config, groups: ['nightly'], parameters: PATHHETZNERINSTALL, environmentAuth: ENVIRONMENTMAP['HETZNER_CLUSTER'])
+          } else {
+            doAT(conf: config, groups: ['nightly'], parameters: PATHVMWAREINSTALL)
+          }
         }
     }
+
 }
