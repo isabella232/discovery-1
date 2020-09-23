@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.39.0 (upcoming)
+## 0.40.0 (upcoming)
+
+* Pending changelog
+
+## 0.39.0-f6c1d05 (Built: September 23, 2020 | Pre-release)
 
 * Make proxies timeout configurable
 * Bump import/export artifact version to 1.2.0-e81eb29
