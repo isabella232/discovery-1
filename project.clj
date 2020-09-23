@@ -87,7 +87,10 @@
      :exclusions [com.fasterxml.jackson.core/jackson-core]]
    ;; STRATIO >
    [com.mattbertolini/liquibase-slf4j "2.0.0"]                        ; Java Migrations lib logging. We don't actually use this AFAIK (?)
-   [com.taoensso/nippy "2.14.0"]                                      ; Fast serialization (i.e., GZIP) library for Clojure
+   ;; < STRATIO - bump nippy to 3.0.0 due to vulnerability
+   ;; [com.taoensso/nippy "2.14.0"]                                      ; Fast serialization (i.e., GZIP) library for Clojure
+   [com.taoensso/nippy "3.0.0"]                                      ; Fast serialization (i.e., GZIP) library for Clojure
+   ;; STRATIO >
    [commons-codec/commons-codec "1.12"]                               ; Apache Commons -- useful codec util fns
    [commons-io/commons-io "2.6"]                                      ; Apache Commons -- useful IO util fns
    [commons-validator/commons-validator "1.6"                         ; Apache Commons -- useful validation util fns
