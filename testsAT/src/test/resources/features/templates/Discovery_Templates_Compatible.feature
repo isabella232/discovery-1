@@ -8,7 +8,7 @@ Feature: Discovery scenario templates
   Scenario: Take publicAgentFQDN
     Given I set sso token using host '!{EOS_ACCESS_POINT}' with user '${DCOS_USER}' and password '${DCOS_PASSWORD}' and tenant 'NONE'
     Then I get host ip for task '.*marathonlb.*' in service with id '/marathonlb' from CCT and save the value in environment variable 'publicAgentIP'
-    Then I open a ssh connection to '!{publicAgentIP}' with user '${REMOTE_USER}' using pem file '${PEM_FILE_PATH}'
+    Then I open a ssh connection to '!{publicAgentIP}' with user '!{CLUSTER_SSH_USER}' using pem file '!{CLUSTER_SSH_PEM_PATH}'
     And I run 'hostname -f' in the ssh connection with exit status '0' and save the value in environment variable 'publicAgentFQDN'
 
   Scenario: Get Postgres IP
@@ -20,7 +20,7 @@ Feature: Discovery scenario templates
     And I save element '$.str' in environment variable 'exhibitor_answer'
     And I save '!{exhibitor_answer}' in variable 'parsed_answer'
     Given I run 'echo '!{parsed_answer}' | jq '.phases[] | .[] | .steps[] | .[] | select((.status=="RUNNING") and (.role=="master") and (.name=="pg-0001")).agent_hostname' | sed 's/^.\|.$//g'' locally with exit status '0' and save the value in environment variable 'pgIP'
-    Given I open a ssh connection to '!{pgIP}' with user '${REMOTE_USER}' using pem file '${PEM_FILE_PATH}'
+    Given I open a ssh connection to '!{pgIP}' with user '!{CLUSTER_SSH_USER}' using pem file '!{CLUSTER_SSH_PEM_PATH}'
     Then I run 'sudo docker ps -q | xargs -n 1 sudo docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}} {{ .Name }}' | sed 's/ \// /'| grep !{pgIPCalico} | awk '{print $2}'' in the ssh connection and save the value in environment variable 'pgContainerName'
     And I run 'echo 'POSTGRES CONTAINER: !{pgContainerName}'' locally
 

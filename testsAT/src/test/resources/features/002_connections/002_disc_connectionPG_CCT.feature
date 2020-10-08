@@ -10,7 +10,7 @@ Feature: Postgres Conexion with Discovery
 
   @skipOnEnv(SKIP_DISCOVERY_DATASET_CREATION)
   Scenario: Create data for Discovery on Postgres
-    Given I open a ssh connection to '!{pgIP}' with user '${REMOTE_USER}' using pem file '${PEM_FILE_PATH}'
+    Given I open a ssh connection to '!{pgIP}' with user '!{CLUSTER_SSH_USER}' using pem file '!{CLUSTER_SSH_PEM_PATH}'
     And I outbound copy 'src/test/resources/schemas/createPGContent.sql' through a ssh connection to '/tmp'
     When I run 'sudo docker cp /tmp/createPGContent.sql !{pgContainerName}:/tmp/ ; sudo docker exec -t !{pgContainerName} psql -p 5432 -U "${DCOS_TENANT1}-${DISCOVERY_ID:-discovery-qa}" -d ${DISCOVERY_METADATA_DB_NAME:-discovery} -c "CREATE SCHEMA IF NOT EXISTS \"discoveryqa\";"' in the ssh connection
     And I run 'sudo docker cp /tmp/createPGContent.sql !{pgContainerName}:/tmp/ ; sudo docker exec -t !{pgContainerName} psql -p 5432 -U "${DCOS_TENANT1}-${DISCOVERY_ID:-discovery-qa}" -d ${DISCOVERY_METADATA_DB_NAME:-discovery} -f /tmp/createPGContent.sql | grep "INSERT 0 1" | wc -l' in the ssh connection
@@ -63,7 +63,7 @@ Feature: Postgres Conexion with Discovery
 
   @skipOnEnv(DISCOVERY_SKIP_UNINSTALL=yes)
   Scenario: Delete database for Discovery on Postgrestls
-    Given I open a ssh connection to '!{pgIP}' with user '${REMOTE_USER}' using pem file '${PEM_FILE_PATH}'
+    Given I open a ssh connection to '!{pgIP}' with user '!{CLUSTER_SSH_USER}' using pem file '!{CLUSTER_SSH_PEM_PATH}'
     When I run 'sudo docker exec -t !{pgContainerName} psql -p 5432 -U "${DCOS_TENANT1}-${DISCOVERY_ID:-discovery-qa}" -d ${DISCOVERY_METADATA_DB_NAME:-discovery} -c "DROP SCHEMA \"discoveryqa\" CASCADE;"' in the ssh connection
     Then the command output contains 'DROP SCHEMA'
 
