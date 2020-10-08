@@ -13,10 +13,10 @@ Feature: Discovery scenario templates
 
   Scenario: Get Postgres IP
     Given I set sso token using host '!{EOS_ACCESS_POINT}' with user '${DCOS_USER}' and password '${DCOS_PASSWORD}' and tenant 'NONE'
-    Then in less than '600' seconds, checking each '20' seconds, I send a 'GET' request to '/exhibitor/exhibitor/v1/explorer/node-data?key=%2Fdatastore%2Fcommunity%2F${POSTGRES_NAME:-postgrestls}%2Fplan-v2-json&_=' so that the response contains 'str'
+    Then in less than '600' seconds, checking each '20' seconds, I send a 'GET' request to '/exhibitor/exhibitor/v1/explorer/node-data?key=%2Fdatastore%2Fcommunity%2F${DISCOVERY_POSTGRES_NAME:-postgrestls}%2Fplan-v2-json&_=' so that the response contains 'str'
     When I securely send requests to '!{EOS_ACCESS_POINT}:443'
     When I get internal host ip for task 'pg-0001' in service with id '/${DISCOVERY_POSTGRES_NAME:-postgrestls}' from CCT and save the value in environment variable 'pgIPCalico'
-    Then I send a 'GET' request to '/exhibitor/exhibitor/v1/explorer/node-data?key=%2Fdatastore%2Fcommunity%2F${POSTGRES_NAME}%2Fplan-v2-json&_='
+    Then I send a 'GET' request to '/exhibitor/exhibitor/v1/explorer/node-data?key=%2Fdatastore%2Fcommunity%2F${DISCOVERY_POSTGRES_NAME:-postgrestls}%2Fplan-v2-json&_='
     And I save element '$.str' in environment variable 'exhibitor_answer'
     And I save '!{exhibitor_answer}' in variable 'parsed_answer'
     Given I run 'echo '!{parsed_answer}' | jq '.phases[] | .[] | .steps[] | .[] | select((.status=="RUNNING") and (.role=="master") and (.name=="pg-0001")).agent_hostname' | sed 's/^.\|.$//g'' locally with exit status '0' and save the value in environment variable 'pgIP'
